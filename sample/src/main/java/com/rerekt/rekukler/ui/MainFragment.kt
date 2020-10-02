@@ -2,10 +2,12 @@ package com.rerekt.rekukler.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rerekt.rekukler.R
+import com.rerekt.rekukler.ViewHolderBinder
 import com.rerekt.rekukler.configure
 
 class MainFragment: Fragment(R.layout.fragment_main) {
@@ -22,7 +24,17 @@ class MainFragment: Fragment(R.layout.fragment_main) {
                 reverseLayout = false
                 orientation = LinearLayoutManager.VERTICAL
             }
+            viewBinder(articlesBinder())
+            viewBinder<Loading>(R.layout.item_loading) {}
         }
     }
 
+}
+
+object Loading
+
+fun articlesBinder() = ViewHolderBinder<String>(R.layout.list_item) {
+    bind { data, view ->
+        view.findViewById<TextView>(R.id.tv_text).text = data
+    }
 }
