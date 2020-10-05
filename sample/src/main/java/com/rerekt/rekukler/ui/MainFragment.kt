@@ -7,7 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rerekt.rekukler.R
-import com.rerekt.rekukler.ViewHolderBinder
+import com.rerekt.rekukler.ViewBinder
 import com.rerekt.rekukler.configure
 
 class MainFragment: Fragment(R.layout.fragment_main) {
@@ -33,7 +33,7 @@ class MainFragment: Fragment(R.layout.fragment_main) {
 
 object Loading
 
-fun articlesBinder() = ViewHolderBinder<String>(R.layout.list_item) {
+fun articlesBinder() = ViewBinder<String>(R.layout.list_item) {
     bind { data, view ->
         view.findViewById<TextView>(R.id.tv_text).text = data
     }
