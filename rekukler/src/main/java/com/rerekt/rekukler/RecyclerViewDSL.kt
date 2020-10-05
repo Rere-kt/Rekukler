@@ -1,7 +1,6 @@
 package com.rerekt.rekukler
 
 import android.content.Context
-import android.view.ViewGroup
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,7 +24,7 @@ class RecyclerViewConfig(
     private val context: Context
 ) {
 
-    var bindersSet = mutableSetOf<ViewBinder<*>>()
+    internal var bindersSet = listOf<ViewBinder<*>>()
 
     internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
@@ -39,6 +38,7 @@ class RecyclerViewConfig(
         block: GridLayoutManager.() -> Unit = {}
     ) { layoutManager = GridLayoutManager(context, spansCount).apply(block) }
 
-    fun viewBinder(viewBinder: ViewBinder<*>) =
-            bindersSet.add(viewBinder)
+    fun viewBinders(vararg viewBinder: ViewBinder<*>) {
+        bindersSet = viewBinder.toList()
+    }
 }
