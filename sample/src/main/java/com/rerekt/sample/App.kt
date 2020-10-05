@@ -1,4 +1,4 @@
-package com.rerekt.rekukler
+package com.rerekt.sample
 
 import android.app.Application
 

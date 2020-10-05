@@ -8,11 +8,15 @@ android {
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.rerekt.rekukler"
+        applicationId "com.rerekt.sample"
         minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 
     buildTypes {

@@ -1,16 +1,16 @@
-package com.rerekt.rekukler.ui
+package com.rerekt.sample.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.rerekt.rekukler.R
+import com.rerekt.sample.R
 
 open class AppActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        if (savedInstanceState == null) { goTo(MainFragment()) }
+        if (savedInstanceState == null) { goTo(ListFragment()) }
     }
 
     private fun goTo(fragment: Fragment) {
