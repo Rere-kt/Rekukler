@@ -1,9 +1,9 @@
 package com.rerekt.rekukler
 
 import android.content.Context
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import android.graphics.Bitmap
+import androidx.core.graphics.drawable.toDrawable
+import androidx.recyclerview.widget.*
 
 fun RecyclerView.configure(block: RecyclerViewConfig.() -> Unit) {
     RecyclerViewConfig(context).also {
@@ -25,6 +25,7 @@ class RecyclerViewConfig(
 ) {
 
     internal var bindersSet = listOf<ViewBinder<*>>()
+    internal var _itemDecoration: RecyclerView.ItemDecoration? = null
 
     internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
@@ -38,7 +39,23 @@ class RecyclerViewConfig(
         block: GridLayoutManager.() -> Unit = {}
     ) { layoutManager = GridLayoutManager(context, spansCount).apply(block) }
 
+    fun dividerItemDecoration(size: Int) {
+        itemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
+                setDrawable(
+                    Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+                        .toDrawable(context.resources)
+                )
+            }
+        )
+    }
+
+    fun itemDecoration(decoration: RecyclerView.ItemDecoration) {
+        _itemDecoration = decoration
+    }
+
     fun viewBinders(vararg viewBinder: ViewBinder<*>) {
         bindersSet = viewBinder.toList()
     }
+
 }

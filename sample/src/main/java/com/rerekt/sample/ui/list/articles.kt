@@ -6,7 +6,10 @@ import com.rerekt.sample.R
 
 fun articlesBinder(
     onClick: (Pair<String, String>) -> Unit = {}
-) = viewBinder<Pair<String, String>>(R.layout.list_item) {  data ->
+) = viewBinder<Pair<String, String>>(
+    layoutResId = R.layout.list_item,
+    areItemsSame = { old, new -> old.first == new.first },
+) {  data ->
     val (title, description) = data
     findViewById<TextView>(R.id.tv_title).text = title
     findViewById<TextView>(R.id.tv_description).text = description

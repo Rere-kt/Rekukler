@@ -25,6 +25,8 @@ class ViewBinder<Type: Any> (
 inline fun <reified Type: Any> viewBinder(
         @LayoutRes layoutResId: Int,
         noinline isForItem: (item: Any) -> Boolean = { it is Type },
+        noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
+        noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline bind: View.(Type) -> Unit = {}
 ) = ViewBinder<Type>(
         layoutResId = layoutResId,
