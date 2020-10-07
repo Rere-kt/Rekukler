@@ -1,4 +1,4 @@
-package com.rerekt.sample.ui.list
+package com.rerekt.sample.ui.global.list
 
 import com.rerekt.rekukler.viewBinder
 import com.rerekt.sample.R

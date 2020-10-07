@@ -10,9 +10,10 @@ import com.rerekt.rekukler.configure
 import com.rerekt.rekukler.updateList
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
-import com.rerekt.sample.ui.list.Loading
-import com.rerekt.sample.ui.list.articlesBinder
-import com.rerekt.sample.ui.list.loadingBinder
+import com.rerekt.sample.ui.global.dip
+import com.rerekt.sample.ui.global.list.Loading
+import com.rerekt.sample.ui.global.list.articlesBinder
+import com.rerekt.sample.ui.global.list.loadingBinder
 
 class ListFragment: Fragment(R.layout.fragment_main) {
 
@@ -47,7 +48,9 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 articlesBinder { println("Click from Article item") },
                 loadingBinder()
             )
-            dividerItemDecoration(size = 2)
+            dividerItemDecoration(
+                size = 2.dip(resources).toInt()
+            )
         }
     }
 

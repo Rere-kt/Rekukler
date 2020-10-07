@@ -1,4 +1,4 @@
-package com.rerekt.sample.ui.list
+package com.rerekt.sample.ui.global.list
 
 import android.widget.TextView
 import com.rerekt.rekukler.viewBinder
