@@ -11,6 +11,7 @@ import com.rerekt.rekukler.updateList
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
+import com.rerekt.sample.ui.global.list.Article
 import com.rerekt.sample.ui.global.list.Loading
 import com.rerekt.sample.ui.global.list.articlesBinder
 import com.rerekt.sample.ui.global.list.loadingBinder
@@ -29,7 +30,11 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 buildList {
                     addAll(
                         (0..10).map {
-                            "Title #$it" to "Description #$it"
+                            Article(
+                                id = it,
+                                title = "Title#$it",
+                                description = "Description#$it"
+                            )
                         }
                     )
                     add(Loading)

@@ -4,14 +4,19 @@ import android.widget.TextView
 import com.rerekt.rekukler.viewBinder
 import com.rerekt.sample.R
 
+data class Article(
+    val id: Int,
+    val title: String,
+    val description: String
+)
+
 fun articlesBinder(
-    onClick: (Pair<String, String>) -> Unit = {}
-) = viewBinder<Pair<String, String>>(
+    onClick: (Article) -> Unit = {}
+) = viewBinder<Article>(
     layoutResId = R.layout.list_item,
-    areItemsSame = { old, new -> old.first == new.first },
-) {  data ->
-    val (title, description) = data
-    findViewById<TextView>(R.id.tv_title).text = title
-    findViewById<TextView>(R.id.tv_description).text = description
+    areItemsSame = { old, new -> old.id == new.id },
+) { data ->
+    findViewById<TextView>(R.id.tv_title).text = data.title
+    findViewById<TextView>(R.id.tv_description).text = data.description
     setOnClickListener { onClick.invoke(data) }
 }
