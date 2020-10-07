@@ -9,7 +9,9 @@ import androidx.recyclerview.widget.RecyclerView
 class ViewBinder<Type: Any> (
         private val layoutResId: Int,
         val isForItem: (item: Any) -> Boolean,
-        private val bind: View.(Type) -> Unit
+        val areItemsSame: (Type, Type) -> Boolean,
+        val areContentsSame: (Type, Type) -> Boolean,
+        private val bind: View.(Type) -> Unit,
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -31,5 +33,7 @@ inline fun <reified Type: Any> viewBinder(
 ) = ViewBinder<Type>(
         layoutResId = layoutResId,
         isForItem = isForItem,
+        areItemsSame = areItemsSame,
+        areContentsSame = areContentsSame,
         bind = bind
 )

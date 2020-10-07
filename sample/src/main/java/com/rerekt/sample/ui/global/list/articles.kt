@@ -15,6 +15,7 @@ fun articlesBinder(
 ) = viewBinder<Article>(
     layoutResId = R.layout.list_item,
     areItemsSame = { old, new -> old.id == new.id },
+    areContentsSame = { old, new -> old == new }
 ) { data ->
     findViewById<TextView>(R.id.tv_title).text = data.title
     findViewById<TextView>(R.id.tv_description).text = data.description
