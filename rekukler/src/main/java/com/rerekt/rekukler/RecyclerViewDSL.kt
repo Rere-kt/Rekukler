@@ -48,9 +48,12 @@ class RecyclerViewConfig(
         block: GridLayoutManager.() -> Unit = {}
     ) { layoutManager = GridLayoutManager(context, spansCount).apply(block) }
 
-    fun dividerItemDecoration(size: Int) {
+    fun dividerItemDecoration(
+        size: Int,
+        orientation: Int
+    ) {
         itemDecoration(
-            DividerItemDecoration(context, DividerItemDecoration.VERTICAL).apply {
+            DividerItemDecoration(context, orientation).apply {
                 setDrawable(
                     Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
                         .toDrawable(context.resources)
