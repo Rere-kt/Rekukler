@@ -25,6 +25,12 @@ class ListFragment: Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         initRecycler()
+        postDelayedListUpdate()
+    }
+
+    // Just like network async request
+    @ExperimentalStdlibApi
+    private fun postDelayedListUpdate() {
         Handler(Looper.getMainLooper()).postDelayed({
             binding.rvArticles.updateList(
                 buildList {

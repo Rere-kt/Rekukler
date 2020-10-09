@@ -33,7 +33,7 @@ class RecyclerViewConfig(
     private val context: Context
 ) {
 
-    internal var bindersSet = listOf<ViewBinder<*>>()
+    internal var bindersSet = listOf<ViewBinder<Any>>()
     internal var _itemDecoration: RecyclerView.ItemDecoration? = null
 
     internal var layoutManager: RecyclerView.LayoutManager =
@@ -67,7 +67,7 @@ class RecyclerViewConfig(
     }
 
     fun viewBinders(vararg viewBinder: ViewBinder<*>) {
-        bindersSet = viewBinder.toList()
+        bindersSet = viewBinder.toList() as List<ViewBinder<Any>>
     }
 
 }
