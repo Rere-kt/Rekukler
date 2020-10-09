@@ -50,7 +50,7 @@ class RecyclerViewConfig(
 
     fun dividerItemDecoration(
         size: Int,
-        orientation: Int
+        orientation: Int = DividerItemDecoration.VERTICAL
     ) {
         itemDecoration(
             DividerItemDecoration(context, orientation).apply {
