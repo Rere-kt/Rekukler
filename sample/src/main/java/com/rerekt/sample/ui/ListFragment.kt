@@ -60,7 +60,9 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 articlesBinder { println("Click from Article item") },
                 loadingBinder()
             )
-			dividerItemDecoration()
+			dividerItemDecoration(
+				size = 2.dip(resources).toInt()
+			)
         }
     }
 

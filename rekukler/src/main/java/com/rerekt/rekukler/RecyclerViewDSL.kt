@@ -51,12 +51,26 @@ class RecyclerViewConfig(
 
     fun dividerItemDecoration(
         orientation: Int = DividerItemDecoration.VERTICAL,
-		block: DividerItemDecoration.() -> Unit = {}
+		block: DividerItemDecoration.() -> Unit
     ) {
         itemDecoration(
             DividerItemDecoration(context, orientation).apply(block)
         )
     }
+
+	fun dividerItemDecoration(
+		size: Int,
+		orientation: Int = DividerItemDecoration.VERTICAL
+	) {
+		itemDecoration(
+			DividerItemDecoration(context, orientation).apply {
+				setDrawable(
+					Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+						.toDrawable(context.resources)
+				)
+			}
+		)
+	}
 
     fun itemDecoration(decoration: RecyclerView.ItemDecoration) {
         _itemDecoration = decoration
