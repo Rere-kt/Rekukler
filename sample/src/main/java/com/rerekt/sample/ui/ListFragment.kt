@@ -5,6 +5,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rerekt.rekukler.configure
 import com.rerekt.rekukler.updateList
@@ -59,9 +60,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 articlesBinder { println("Click from Article item") },
                 loadingBinder()
             )
-            dividerItemDecoration(
-                size = 2.dip(resources).toInt()
-            )
+			dividerItemDecoration()
         }
     }
 
