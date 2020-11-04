@@ -10,6 +10,7 @@ fun RecyclerView.configure(block: RecyclerViewConfig.() -> Unit) {
         block(it)
         layoutManager = it.layoutManager
         adapter = MultiBindingAdapter(it.bindersSet)
+		it._itemDecoration?.let { addItemDecoration(it) }
     }
 }
 
@@ -34,7 +35,7 @@ class RecyclerViewConfig(
 ) {
 
     internal var bindersSet = listOf<ViewBinder<Any>>()
-    internal var _itemDecoration: RecyclerView.ItemDecoration? = null
+	internal var _itemDecoration: RecyclerView.ItemDecoration? = null
 
     internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
@@ -49,18 +50,27 @@ class RecyclerViewConfig(
     ) { layoutManager = GridLayoutManager(context, spansCount).apply(block) }
 
     fun dividerItemDecoration(
-        size: Int,
-        orientation: Int = DividerItemDecoration.VERTICAL
+        orientation: Int = DividerItemDecoration.VERTICAL,
+		block: DividerItemDecoration.() -> Unit
     ) {
         itemDecoration(
-            DividerItemDecoration(context, orientation).apply {
-                setDrawable(
-                    Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
-                        .toDrawable(context.resources)
-                )
-            }
+            DividerItemDecoration(context, orientation).apply(block)
         )
     }
+
+	fun dividerItemDecoration(
+		size: Int,
+		orientation: Int = DividerItemDecoration.VERTICAL
+	) {
+		itemDecoration(
+			DividerItemDecoration(context, orientation).apply {
+				setDrawable(
+					Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+						.toDrawable(context.resources)
+				)
+			}
+		)
+	}
 
     fun itemDecoration(decoration: RecyclerView.ItemDecoration) {
         _itemDecoration = decoration
