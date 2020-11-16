@@ -30,6 +30,8 @@ fun RecyclerView.updateList(newList: List<Any>) {
     }
 }
 
+fun <T> RecyclerView.getItems() = (adapter as? MultiBindingAdapter)?.items as? List<T>
+
 class RecyclerViewConfig(
     private val context: Context
 ) {

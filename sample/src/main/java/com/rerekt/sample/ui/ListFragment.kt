@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rerekt.rekukler.configure
+import com.rerekt.rekukler.getItems
 import com.rerekt.rekukler.updateList
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
@@ -47,7 +48,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                     add(Loading)
                 }
             )
-        }, 500)
+		}, 500)
     }
 
     private fun initRecycler() {
