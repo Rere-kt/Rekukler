@@ -47,7 +47,6 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                     add(Loading)
                 }
             )
-			println(binding.rvArticles.getItems<Article>())
 		}, 500)
     }
 
