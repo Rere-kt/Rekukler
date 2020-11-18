@@ -10,19 +10,23 @@ class MultiBindingAdapter(
     internal var items: List<Any> = listOf()
 	private val holders: MutableList<RecyclerView.ViewHolder> = mutableListOf()
 
-	fun getViewHolder(position: Int) : RecyclerView.ViewHolder? = holders.getOrNull(position)
-
-    override fun onCreateViewHolder(
-            parent: ViewGroup,
-            position: Int
-    ) = getBinder(position).createViewHolder(parent).apply {
-		holders.add(this)
-	}
+	override fun onCreateViewHolder(
+		parent: ViewGroup,
+		viewType: Int
+	): RecyclerView.ViewHolder =
+		checkNotNull(
+			value = bindersSet[viewType].createViewHolder(parent),
+			lazyMessage = { "Unnable to find ViewBinder for viewType $viewType" }
+		)
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
-            getBinder(position).bindViewHolder(viewHolder, items[position])
+            getBinder(position).bindViewHolder(viewHolder, items[position], position)
 
     override fun getItemCount() = items.size
+
+	// view type must be position of binder in bindersSet
+	override fun getItemViewType(position: Int)
+		= bindersSet.indexOfFirst { it.isForItem(items[position]) }
 
     private fun getBinder(position: Int): ViewBinder<*> {
         val item = items[position]
