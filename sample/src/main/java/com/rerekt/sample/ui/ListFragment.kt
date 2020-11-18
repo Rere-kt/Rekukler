@@ -5,18 +5,13 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rerekt.rekukler.configure
-import com.rerekt.rekukler.getItems
 import com.rerekt.rekukler.updateList
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
-import com.rerekt.sample.ui.global.list.Article
-import com.rerekt.sample.ui.global.list.Loading
-import com.rerekt.sample.ui.global.list.articlesBinder
-import com.rerekt.sample.ui.global.list.loadingBinder
+import com.rerekt.sample.ui.global.list.*
 
 class ListFragment: Fragment(R.layout.fragment_main) {
 

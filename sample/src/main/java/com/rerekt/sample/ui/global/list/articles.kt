@@ -14,10 +14,14 @@ fun articlesBinder(
     onClick: (Article) -> Unit = {}
 ) = viewBinder<Article>(
     layoutResId = R.layout.list_item,
+	isForItem = { it is Article },
     areItemsSame = { old, new -> old.id == new.id },
     areContentsSame = { old, new -> old == new }
-) { data ->
-    findViewById<TextView>(R.id.tv_title).text = data.title
-    findViewById<TextView>(R.id.tv_description).text = data.description
-    setOnClickListener { onClick.invoke(data) }
+) {
+	bindView { data ->
+		findViewById<TextView>(R.id.tv_title).text = data.title
+		findViewById<TextView>(R.id.tv_description).text = data.description
+		findViewById<TextView>(R.id.tv_position).text = position.toString()
+		setOnClickListener { onClick.invoke(data) }
+	}
 }
