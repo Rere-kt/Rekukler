@@ -8,11 +8,16 @@ class MultiBindingAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     internal var items: List<Any> = listOf()
+	private val holders: MutableList<RecyclerView.ViewHolder> = mutableListOf()
+
+	fun getViewHolder(position: Int) : RecyclerView.ViewHolder? = holders.getOrNull(position)
 
     override fun onCreateViewHolder(
             parent: ViewGroup,
             position: Int
-    ) = getBinder(position).createViewHolder(parent)
+    ) = getBinder(position).createViewHolder(parent).apply {
+		holders.add(this)
+	}
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
             getBinder(position).bindViewHolder(viewHolder, items[position])
