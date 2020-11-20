@@ -37,10 +37,10 @@ open class RecyclerViewConfig(
     private val context: Context
 ) {
 
-    internal var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
-	internal var _itemDecoration: RecyclerView.ItemDecoration? = null
+    var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
+	var _itemDecoration: RecyclerView.ItemDecoration? = null
 
-    internal var layoutManager: RecyclerView.LayoutManager =
+    var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
 
     fun linearLayout(
