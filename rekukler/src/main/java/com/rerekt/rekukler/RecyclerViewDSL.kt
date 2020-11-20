@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.*
+import androidx.viewbinding.ViewBinding
 
 fun RecyclerView.configure(block: RecyclerViewConfig.() -> Unit) {
     RecyclerViewConfig(context).also {
@@ -36,7 +37,7 @@ class RecyclerViewConfig(
     private val context: Context
 ) {
 
-    internal var bindersSet = listOf<ViewBinder<Any>>()
+    internal var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
 	internal var _itemDecoration: RecyclerView.ItemDecoration? = null
 
     internal var layoutManager: RecyclerView.LayoutManager =
@@ -78,8 +79,8 @@ class RecyclerViewConfig(
         _itemDecoration = decoration
     }
 
-    fun viewBinders(vararg viewBinder: ViewBinder<*>) {
-        bindersSet = viewBinder.toList() as List<ViewBinder<Any>>
+    fun viewBinders(vararg viewBinder: ViewBinder<*, *>) {
+        bindersSet = viewBinder.toList() as List<ViewBinder<Any, ViewBinding>>
     }
 
 }

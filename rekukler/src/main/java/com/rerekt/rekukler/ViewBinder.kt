@@ -5,13 +5,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 
-class ViewBinder<Type: Any> (
+class ViewBinder<Type: Any, Binding: ViewBinding> (
         private val layoutResId: Int,
+        val binder: (View) -> Binding,
         val isForItem: (item: Any) -> Boolean,
         val areItemsSame: (Type, Type) -> Boolean,
         val areContentsSame: (Type, Type) -> Boolean,
-        private val holderBinder: Holder<Type>.(Type) -> Unit,
+        private val holderBinder: Holder<Type, Binding>.(Type) -> Unit
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
@@ -20,43 +22,45 @@ class ViewBinder<Type: Any> (
     }
 
     fun bindViewHolder(viewHolder: RecyclerView.ViewHolder, item: Any, position: Int) {
-		Holder<Type>()
+		Holder<Type, Binding>(viewHolder)
 			.apply {
 				holderBinder(item as Type)
-				_viewHolder = viewHolder
 				itemPosition = position
-				viewHolder.itemView.bindingBlock(item)
+                bindingBlock.invoke(binder(viewHolder.itemView), item)
 			}
     }
 }
 
-inline fun <reified Type: Any> viewBinder(
+inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
         @LayoutRes layoutResId: Int,
         noinline isForItem: (item: Any) -> Boolean = { it is Type },
         noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
-        noinline holder: Holder<Type>.(Type) -> Unit = {}
-) = ViewBinder(
+        noinline binder: (View) -> Binder,
+        noinline holder: Holder<Type, Binder>.(Type) -> Unit = {}
+) = ViewBinder<Type, Binder>(
         layoutResId = layoutResId,
+        binder = binder,
         isForItem = isForItem,
         areItemsSame = areItemsSame,
         areContentsSame = areContentsSame,
 		holderBinder = holder
 )
 
-class Holder<Type: Any> {
+class Holder<Type: Any, Binding: ViewBinding>(
+    val viewHolder: RecyclerView.ViewHolder
+) {
 
-	internal var bindingBlock: View.(Type) -> Unit  = {}
+	internal var bindingBlock: Binding.(Type) -> Unit  = {}
 	internal var itemPosition = 0
-	internal var _viewHolder: RecyclerView.ViewHolder? = null
 
-	val position: Int
+    val itemView: View
+        get() = viewHolder.itemView
+
+    val position: Int
 		get() = itemPosition
 
-	val viewHolder: RecyclerView.ViewHolder?
-		get() = _viewHolder
-
-	fun bindView(bindingBlock: View.(Type) -> Unit) {
+	fun bindView(bindingBlock: Binding.(Type) -> Unit) {
 		this.bindingBlock = bindingBlock
 	}
 
