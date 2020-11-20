@@ -38,7 +38,7 @@ inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
         noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline binder: (View) -> Binder,
         noinline holder: Holder<Type, Binder>.(Type) -> Unit = {}
-) = ViewBinder<Type, Binder>(
+) = ViewBinder(
         layoutResId = layoutResId,
         binder = binder,
         isForItem = isForItem,
