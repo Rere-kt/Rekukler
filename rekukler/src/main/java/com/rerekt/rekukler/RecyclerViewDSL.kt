@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
 
 fun RecyclerView.configure(
-    block: RecyclerViewConfig.() -> Unit,
-    customAdapter: ((List<ViewBinder<Any, ViewBinding>>) -> MultiBindingAdapter)? = null
+    customAdapter: ((List<ViewBinder<Any, ViewBinding>>) -> MultiBindingAdapter)? = null,
+    block: RecyclerViewConfig.() -> Unit
 ) {
     RecyclerViewConfig(context).also {
         block(it)
