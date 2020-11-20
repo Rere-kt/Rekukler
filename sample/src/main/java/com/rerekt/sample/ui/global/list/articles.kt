@@ -1,8 +1,8 @@
 package com.rerekt.sample.ui.global.list
 
-import android.widget.TextView
 import com.rerekt.rekukler.viewBinder
 import com.rerekt.sample.R
+import com.rerekt.sample.databinding.ListItemBinding
 
 data class Article(
     val id: Int,
@@ -12,16 +12,17 @@ data class Article(
 
 fun articlesBinder(
     onClick: (Article) -> Unit = {}
-) = viewBinder<Article>(
+) = viewBinder<Article, ListItemBinding>(
     layoutResId = R.layout.list_item,
+    binder = { ListItemBinding.bind(it) },
 	isForItem = { it is Article },
     areItemsSame = { old, new -> old.id == new.id },
     areContentsSame = { old, new -> old == new }
 ) {
 	bindView { data ->
-		findViewById<TextView>(R.id.tv_title).text = data.title
-		findViewById<TextView>(R.id.tv_description).text = data.description
-		findViewById<TextView>(R.id.tv_position).text = position.toString()
-		setOnClickListener { onClick.invoke(data) }
+        tvTitle.text = data.title
+        tvDescription.text = data.description
+        tvPosition.text = position.toString()
+        itemView.setOnClickListener { onClick.invoke(data) }
 	}
 }

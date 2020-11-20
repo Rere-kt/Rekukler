@@ -2,20 +2,20 @@ package com.rerekt.rekukler
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 
-class MultiBindingAdapter(
-        val bindersSet: List<ViewBinder<Any>>
+open class MultiBindingAdapter(
+	val bindersSet: List<ViewBinder<Any, ViewBinding>>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    internal var items: List<Any> = listOf()
-	private val holders: MutableList<RecyclerView.ViewHolder> = mutableListOf()
+    var items: List<Any> = listOf()
 
 	override fun onCreateViewHolder(
 		parent: ViewGroup,
 		viewType: Int
 	): RecyclerView.ViewHolder =
 		checkNotNull(
-			value = bindersSet[viewType].createViewHolder(parent),
+			value = bindersSet.getOrNull(viewType)?.createViewHolder(parent),
 			lazyMessage = { "Unnable to find ViewBinder for viewType $viewType" }
 		)
 
@@ -28,7 +28,7 @@ class MultiBindingAdapter(
 	override fun getItemViewType(position: Int)
 		= bindersSet.indexOfFirst { it.isForItem(items[position]) }
 
-    private fun getBinder(position: Int): ViewBinder<*> {
+    private fun getBinder(position: Int): ViewBinder<*, *> {
         val item = items[position]
         return checkNotNull(
                 value = bindersSet.find { it.isForItem(item) },
