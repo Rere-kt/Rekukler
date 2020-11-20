@@ -6,11 +6,14 @@ import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.*
 import androidx.viewbinding.ViewBinding
 
-fun RecyclerView.configure(block: RecyclerViewConfig.() -> Unit) {
+fun RecyclerView.configure(
+    block: RecyclerViewConfig.() -> Unit,
+    customAdapter: ((List<ViewBinder<Any, ViewBinding>>) -> MultiBindingAdapter)? = null
+) {
     RecyclerViewConfig(context).also {
         block(it)
         layoutManager = it.layoutManager
-        adapter = MultiBindingAdapter(it.bindersSet)
+        adapter = customAdapter?.invoke(it.bindersSet) ?: MultiBindingAdapter(it.bindersSet)
 		it._itemDecoration?.let { addItemDecoration(it) }
     }
 }

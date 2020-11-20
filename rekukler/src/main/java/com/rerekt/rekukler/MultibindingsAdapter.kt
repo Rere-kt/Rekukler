@@ -5,7 +5,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 open class MultiBindingAdapter(
-        val bindersSet: List<ViewBinder<Any, ViewBinding>>
+	val bindersSet: List<ViewBinder<Any, ViewBinding>>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<Any> = listOf()
