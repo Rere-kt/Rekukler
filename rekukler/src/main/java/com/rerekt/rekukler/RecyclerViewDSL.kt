@@ -33,14 +33,14 @@ fun RecyclerView.updateList(newList: List<Any>) {
 
 fun <T> RecyclerView.getItems() = (adapter as? MultiBindingAdapter)?.items as? List<T>
 
-open class RecyclerViewConfig(
+class RecyclerViewConfig(
     private val context: Context
 ) {
 
-    var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
-	var _itemDecoration: RecyclerView.ItemDecoration? = null
+    internal var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
+	internal var _itemDecoration: RecyclerView.ItemDecoration? = null
 
-    var layoutManager: RecyclerView.LayoutManager =
+    internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
 
     fun linearLayout(
