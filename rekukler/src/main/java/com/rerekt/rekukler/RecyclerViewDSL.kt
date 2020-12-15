@@ -14,7 +14,7 @@ fun RecyclerView.configure(
         block(it)
         layoutManager = it.layoutManager
         adapter = customAdapter?.invoke(it.bindersSet) ?: MultiBindingAdapter(it.bindersSet)
-		it._itemDecoration?.let { addItemDecoration(it) }
+        it.itemDecorations.forEach { addItemDecoration(it) }
     }
 }
 
@@ -41,7 +41,7 @@ class RecyclerViewConfig(
 ) {
 
     internal var bindersSet = listOf<ViewBinder<Any, ViewBinding>>()
-	internal var _itemDecoration: RecyclerView.ItemDecoration? = null
+	internal var itemDecorations: MutableList<RecyclerView.ItemDecoration> = mutableListOf()
 
     internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
@@ -79,7 +79,7 @@ class RecyclerViewConfig(
 	}
 
     fun itemDecoration(decoration: RecyclerView.ItemDecoration) {
-        _itemDecoration = decoration
+        itemDecorations.add(decoration)
     }
 
     fun viewBinders(vararg viewBinder: ViewBinder<*, *>) {

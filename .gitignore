@@ -17,3 +17,6 @@ gradle.xml
 .idea/compiler.xml
 .idea/gradle.xml
 .idea/misc.xml
+.idea/markdown-navigator-enh.xml
+.idea/markdown-navigator.xml
+.idea/runConfigurations.xml
