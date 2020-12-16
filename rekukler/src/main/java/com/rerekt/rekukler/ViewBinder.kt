@@ -72,5 +72,8 @@ class Holder<Type: Any, Binding: ViewBinding>(
 	fun getDrawable(@DrawableRes resId: Int): Drawable? = ContextCompat.getDrawable(itemView.context, resId)
 	fun getColorStateList(@ColorRes resId: Int): ColorStateList? = ContextCompat.getColorStateList(itemView.context, resId)
 	fun <V: View> findViewById(@IdRes resId: Int): V = itemView.findViewById(resId)
+	fun setOnClickListener(l: (View) -> Unit) {
+		itemView.setOnClickListener { l.invoke(it) }
+	}
 
 }
