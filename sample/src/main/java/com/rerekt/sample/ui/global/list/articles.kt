@@ -22,7 +22,7 @@ fun articlesBinder(
 	bindView { data ->
         tvTitle.text = data.title
         tvDescription.text = data.description
-        tvPosition.text = position.toString()
+        tvPosition.text = getString(R.string.position, position)
         itemView.setOnClickListener { onClick.invoke(data) }
 	}
 }

@@ -51,7 +51,7 @@ inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
 )
 
 class Holder<Type: Any, Binding: ViewBinding>(
-    val viewHolder: RecyclerView.ViewHolder
+	private val viewHolder: RecyclerView.ViewHolder
 ) {
 
 	internal var bindingBlock: Binding.(Type) -> Unit  = {}
@@ -68,7 +68,7 @@ class Holder<Type: Any, Binding: ViewBinding>(
 	}
 
 	fun getString(@StringRes resId: Int): String = itemView.context.getString(resId)
-	fun getString(@StringRes resId: Int, vararg formatArgs: Any): String = itemView.context.getString(resId, formatArgs)
+	fun getString(@StringRes resId: Int, vararg formatArgs: Any): String = itemView.context.getString(resId, *formatArgs)
 	fun getDrawable(@DrawableRes resId: Int): Drawable? = ContextCompat.getDrawable(itemView.context, resId)
 	fun getColorStateList(@ColorRes resId: Int): ColorStateList? = ContextCompat.getColorStateList(itemView.context, resId)
 	fun <V: View> findViewById(@IdRes resId: Int): V = itemView.findViewById(resId)
