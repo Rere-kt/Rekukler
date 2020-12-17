@@ -51,7 +51,7 @@ inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
 )
 
 class Holder<Type: Any, Binding: ViewBinding>(
-	private val viewHolder: RecyclerView.ViewHolder
+	val viewHolder: RecyclerView.ViewHolder
 ) {
 
 	internal var bindingBlock: Binding.(Type) -> Unit  = {}
