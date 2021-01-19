@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.rerekt.rekukler.MultiBindingAdapter
 import com.rerekt.rekukler.configure
 import com.rerekt.rekukler.updateList
 import com.rerekt.sample.R
@@ -16,6 +17,13 @@ import com.rerekt.sample.ui.global.list.*
 class ListFragment: Fragment(R.layout.fragment_main) {
 
     lateinit var binding: FragmentMainBinding
+
+    private val adapter by lazy {
+        MultiBindingAdapter(
+            articlesBinder { println("Click from Article item") },
+            loadingBinder()
+        )
+    }
 
     @ExperimentalStdlibApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,15 +55,11 @@ class ListFragment: Fragment(R.layout.fragment_main) {
     }
 
     private fun initRecycler() {
-        binding.rvArticles.configure {
+        binding.rvArticles.configure(adapter) {
             linearLayout {
                 reverseLayout = false
                 orientation = LinearLayoutManager.VERTICAL
             }
-            viewBinders(
-                articlesBinder { println("Click from Article item") },
-                loadingBinder()
-            )
 			dividerItemDecoration(
 				size = 2.dip(resources).toInt()
 			)

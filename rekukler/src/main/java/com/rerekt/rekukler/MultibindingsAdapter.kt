@@ -5,10 +5,11 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
 open class MultiBindingAdapter(
-	val bindersSet: List<ViewBinder<Any, ViewBinding>>
+	vararg binders: ViewBinder<*, *>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<Any> = listOf()
+	internal val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
 
 	override fun onCreateViewHolder(
 		parent: ViewGroup,
