@@ -9,7 +9,7 @@ open class MultiBindingAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<Any> = listOf()
-	internal val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
+	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
 
 	override fun onCreateViewHolder(
 		parent: ViewGroup,
