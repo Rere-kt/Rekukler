@@ -1,0 +1,3 @@
+rootProject.name = "Rekukler"
+include ':sample'
+include ':rekukler'
