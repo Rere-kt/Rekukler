@@ -2,13 +2,10 @@ package com.rerekt.rekukler
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
-import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.*
-import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.core.content.ContextCompat
-import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -22,7 +19,6 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-//        val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
         val itemView = AsyncLayout(parent.context).apply { inflateAsync(layoutResId) }
 		return object : RecyclerView.ViewHolder(itemView) {}
     }
