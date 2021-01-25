@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.*
+import androidx.asynclayoutinflater.view.AsyncLayoutInflater
 import androidx.core.content.ContextCompat
+import androidx.core.view.updateLayoutParams
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -20,16 +22,23 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
-        return object : RecyclerView.ViewHolder(itemView) {}
+//        val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
+        val itemView = AsyncLayout(parent.context).apply { inflateAsync(layoutResId) }
+		return object : RecyclerView.ViewHolder(itemView) {}
     }
 
-    fun bindViewHolder(viewHolder: RecyclerView.ViewHolder, item: Any, position: Int) {
+    @Suppress("UNCHECKED_CAST")
+	fun bindViewHolder(viewHolder: RecyclerView.ViewHolder, item: Any, position: Int) {
 		Holder<Type, Binding>(viewHolder)
 			.apply {
 				holderBinder(item as Type)
 				itemPosition = position
-                bindingBlock.invoke(binder(viewHolder.itemView), item)
+				(viewHolder.itemView as AsyncLayout).invokeWhenInflated {
+					bindingBlock.invoke(binder(getChildAt(0)), item)
+//					updateLayoutParams {
+//
+//					}
+				}
 			}
     }
 }
