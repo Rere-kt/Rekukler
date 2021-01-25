@@ -17,12 +17,12 @@ fun articlesBinder(
     binder = { ListItemBinding.bind(it) },
 	isForItem = { it is Article },
     areItemsSame = { old, new -> old.id == new.id },
-    areContentsSame = { old, new -> old == new }
+    areContentsSame = { old, new -> old == new },
 ) {
 	bindView { data ->
         tvTitle.text = data.title
         tvDescription.text = data.description
         tvPosition.text = getString(R.string.position, position)
-        itemView.setOnClickListener { onClick.invoke(data) }
+        setOnClickListener { onClick.invoke(data) }
 	}
 }
