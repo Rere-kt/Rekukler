@@ -35,9 +35,6 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 				itemPosition = position
 				(viewHolder.itemView as AsyncLayout).invokeWhenInflated {
 					bindingBlock.invoke(binder(getChildAt(0)), item)
-//					updateLayoutParams {
-//
-//					}
 				}
 			}
     }
