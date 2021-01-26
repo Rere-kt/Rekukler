@@ -15,17 +15,12 @@ android {
         targetSdkVersion(Config.targetSdkVersion)
         versionCode = 1
         versionName = "1.0"
-
-        useProguard = false
-        minifyEnabled = false
-        proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
     }
 
     buildTypes {
         getByName("release") {
-            useProguard = false
-            minifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+            proguardFiles("proguard-library.pro")
+            consumerProguardFiles("proguard-library-consumer.pro")
         }
     }
 
