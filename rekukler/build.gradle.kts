@@ -16,13 +16,16 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        useProguard = false
-        minifyEnabled = false
         proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
     }
 
     buildTypes {
         getByName("release") {
+            useProguard = false
+            minifyEnabled = false
+            proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        }
+        getByName("debug") {
             useProguard = false
             minifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
