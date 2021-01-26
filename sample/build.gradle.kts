@@ -38,6 +38,7 @@ android {
 
 dependencies {
 //    implementation(project(Modules.Library))
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation("com.github.Rere-kt:Rekukler:main-SNAPSHOT")
 
     implementation(Config.Kotlin)
