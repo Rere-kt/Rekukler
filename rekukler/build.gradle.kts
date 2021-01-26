@@ -44,3 +44,16 @@ dependencies {
     implementation(AndroidX.Material)
     implementation(AndroidX.AsyncLayoutInflater)
 }
+
+afterEvaluate {
+    publishing {
+        publications {
+            // Creates a Maven publication called "release".
+            register("release", MavenPublication::class) {
+                groupId = "com.github.Rere-kt"
+                artifactId = "rekukler"
+                version = "1.0"
+            }
+        }
+    }
+}
