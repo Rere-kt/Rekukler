@@ -4,7 +4,7 @@ plugins {
     id("maven-publish")
 }
 
-group = "com.github.Rere-kt"
+group='com.github.Rere-kt'
 
 android {
     compileSdkVersion(Config.compileSdkVersion)
