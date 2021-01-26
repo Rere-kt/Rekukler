@@ -72,8 +72,7 @@ class RecyclerViewConfig(
         swipeFlags: Int = 0,
         onSwiped: (RecyclerView.ViewHolder, direction: Int) -> Unit = { _, _ -> },
         onMove: (RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean = { _, _ -> true }
-    ) {
-        itemTouchHelper = ItemTouchHelper(
+    ) = ItemTouchHelper(
             object : ItemTouchHelper.Callback() {
                 override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int = makeMovementFlags(dragFlags, swipeFlags)
                 override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean =
@@ -82,8 +81,7 @@ class RecyclerViewConfig(
                     onSwiped.invoke(viewHolder, direction)
                 }
             }
-        )
-    }
+    ).apply { itemTouchHelper = this }
 
 	fun dividerItemDecoration(
 		size: Int,
