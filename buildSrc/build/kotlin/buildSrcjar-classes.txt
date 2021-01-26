@@ -1,1 +1,0 @@
-/Users/damir/Rekukler/buildSrc/build/classes/kotlin/main/AndroidX.class:/Users/damir/Rekukler/buildSrc/build/classes/kotlin/main/Config.class:/Users/damir/Rekukler/buildSrc/build/classes/kotlin/main/Modules.class:/Users/damir/Rekukler/buildSrc/build/classes/kotlin/main/Versions.class
