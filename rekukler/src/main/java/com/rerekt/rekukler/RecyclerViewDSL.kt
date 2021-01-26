@@ -16,6 +16,7 @@ fun RecyclerView.configure(
         layoutManager = it.layoutManager
         this.adapter = adapter
         it.itemDecorations.forEach { addItemDecoration(it) }
+        it.itemTouchHelper?.attachToRecyclerView(this)
     }
 }
 
@@ -46,6 +47,8 @@ class RecyclerViewConfig(
     internal var layoutManager: RecyclerView.LayoutManager =
         LinearLayoutManager(context)
 
+    internal var itemTouchHelper: ItemTouchHelper? = null
+
     fun linearLayout(
         block: LinearLayoutManager.() -> Unit = {}
     ) { layoutManager = LinearLayoutManager(context).apply(block) }
@@ -61,6 +64,24 @@ class RecyclerViewConfig(
     ) {
         itemDecoration(
             DividerItemDecoration(context, orientation).apply(block)
+        )
+    }
+
+    fun itemTouchHelper(
+        dragFlags: Int = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
+        swipeFlags: Int = 0,
+        onSwiped: (RecyclerView.ViewHolder, direction: Int) -> Unit = { _, _ -> },
+        onMove: (RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean = { _, _ -> true }
+    ) {
+        itemTouchHelper = ItemTouchHelper(
+            object : ItemTouchHelper.Callback() {
+                override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int = makeMovementFlags(dragFlags, swipeFlags)
+                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean =
+                        onMove(viewHolder, target)
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    onSwiped.invoke(viewHolder, direction)
+                }
+            }
         )
     }
 
