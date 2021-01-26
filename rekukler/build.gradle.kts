@@ -15,8 +15,6 @@ android {
         targetSdkVersion(Config.targetSdkVersion)
         versionCode = 1
         versionName = "1.0"
-        proguardFiles("proguard-rules.pro")
-        consumerProguardFiles("consumer-rules.pro")
     }
 
     compileOptions {

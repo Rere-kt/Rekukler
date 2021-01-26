@@ -37,8 +37,7 @@ android {
 }
 
 dependencies {
-//    implementation(project(Modules.Library))
-    implementation("com.github.Rere-kt:Rekukler:main-SNAPSHOT")
+    implementation(project(Modules.Library))
     implementation(Config.Kotlin)
     implementation(AndroidX.CoreKtx)
     implementation(AndroidX.AppCompat)
