@@ -15,13 +15,14 @@ android {
         targetSdkVersion(Config.targetSdkVersion)
         versionCode = 1
         versionName = "1.0"
+
+        proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
+        consumerProguardFiles("proguard-rules.pro")
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            consumerProguardFiles("consumer-rules.pro")
         }
     }
 
