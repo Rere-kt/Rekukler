@@ -19,7 +19,9 @@ fun RecyclerView.configure(
 }
 
 fun RecyclerView.updateList(newList: List<Any>) {
-    (adapter as? MultiBindingAdapter)?.updateList(newList)
+    (adapter as? MultiBindingAdapter)?.apply {
+        items = newList
+    }
 }
 
 fun <T> RecyclerView.getItems() = (adapter as? MultiBindingAdapter)?.items as? List<T>
