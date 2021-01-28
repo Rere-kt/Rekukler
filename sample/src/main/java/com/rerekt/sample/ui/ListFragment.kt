@@ -37,20 +37,18 @@ class ListFragment: Fragment(R.layout.fragment_main) {
     @ExperimentalStdlibApi
     private fun postDelayedListUpdate() {
         Handler(Looper.getMainLooper()).postDelayed({
-            binding.rvArticles.updateList(
-                buildList {
-                    addAll(
-                        (0..10).map {
-                            Article(
-                                id = it,
-                                title = "Title#$it",
-                                description = "Description#$it"
-                            )
-                        }
-                    )
-                    add(Loading)
-                }
-            )
+            adapter.items = buildList {
+                addAll(
+                    (0..10).map {
+                        Article(
+                            id = it,
+                            title = "Title#$it",
+                            description = "Description#$it"
+                        )
+                    }
+                )
+                add(Loading)
+            }
 		}, 500)
     }
 

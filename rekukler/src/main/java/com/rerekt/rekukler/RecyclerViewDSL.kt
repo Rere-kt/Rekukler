@@ -3,9 +3,7 @@ package com.rerekt.rekukler
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.core.graphics.drawable.toDrawable
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.*
-import androidx.viewbinding.ViewBinding
 
 fun RecyclerView.configure(
     adapter: MultiBindingAdapter,

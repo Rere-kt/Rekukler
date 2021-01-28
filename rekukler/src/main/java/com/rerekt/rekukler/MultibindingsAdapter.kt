@@ -11,7 +11,7 @@ open class MultiBindingAdapter(
 
     var items: List<Any> = listOf()
 		set(value) {
-			updateList(items)
+			updateList(value)
 			field = value
 		}
 	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
@@ -39,8 +39,6 @@ open class MultiBindingAdapter(
 			override fun areContentsTheSame(old: Int, new: Int) =
 				kotlin.runCatching { bindersSet.find { it.isForItem(items[old]) }?.areContentsSame?.invoke(items[old], newList[new]) ?: false }.getOrElse { false }
 		}).dispatchUpdatesTo(this)
-
-		items = newList
 	}
 
 	// view type must be position of binder in bindersSet
