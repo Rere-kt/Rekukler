@@ -2,6 +2,7 @@ package com.rerekt.rekukler
 
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.*
@@ -19,7 +20,9 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-        val itemView = AsyncLayout(parent.context).apply { inflateAsync(layoutResId) }
+		// scroll state handling bug
+		// val itemView = AsyncLayout(parent.context).apply { inflateAsync(layoutResId) }
+        val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
 		return object : RecyclerView.ViewHolder(itemView) {}
     }
 
@@ -29,9 +32,10 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 			.apply {
 				holderBinder(item as Type)
 				itemPosition = position
-				(viewHolder.itemView as AsyncLayout).invokeWhenInflated {
-					bindingBlock.invoke(binder(getChildAt(0)), item)
-				}
+				bindingBlock.invoke(binder.invoke(viewHolder.itemView), item)
+//				(viewHolder.itemView as AsyncLayout).invokeWhenInflated {
+//					bindingBlock.invoke(binder(getChildAt(0)), item)
+//				}
 			}
     }
 }
