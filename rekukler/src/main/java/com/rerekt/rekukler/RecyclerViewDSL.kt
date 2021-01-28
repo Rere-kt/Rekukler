@@ -21,19 +21,7 @@ fun RecyclerView.configure(
 }
 
 fun RecyclerView.updateList(newList: List<Any>) {
-    (adapter as? MultiBindingAdapter)?.apply {
-
-        DiffUtil.calculateDiff(object: DiffUtil.Callback() {
-            override fun getOldListSize() = items.size
-            override fun getNewListSize() = newList.size
-            override fun areItemsTheSame(old: Int, new: Int) =
-                kotlin.runCatching { bindersSet.find { it.isForItem(items[old]) }?.areItemsSame?.invoke(items[old], newList[new]) ?: false }.getOrElse { false }
-            override fun areContentsTheSame(old: Int, new: Int) =
-                kotlin.runCatching { bindersSet.find { it.isForItem(items[old]) }?.areContentsSame?.invoke(items[old], newList[new]) ?: false }.getOrElse { false }
-        }).dispatchUpdatesTo(this)
-
-        items = newList
-    }
+    (adapter as? MultiBindingAdapter)?.updateList(newList)
 }
 
 fun <T> RecyclerView.getItems() = (adapter as? MultiBindingAdapter)?.items as? List<T>

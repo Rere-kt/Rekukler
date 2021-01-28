@@ -1,6 +1,7 @@
 package com.rerekt.rekukler
 
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -9,6 +10,10 @@ open class MultiBindingAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<Any> = listOf()
+		set(value) {
+			updateList(items)
+			field = value
+		}
 	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
 
 	override fun onCreateViewHolder(
@@ -24,6 +29,19 @@ open class MultiBindingAdapter(
             getBinder(position).bindViewHolder(viewHolder, items[position], position)
 
     override fun getItemCount() = items.size
+
+	internal fun updateList(newList: List<Any>) {
+		DiffUtil.calculateDiff(object: DiffUtil.Callback() {
+			override fun getOldListSize() = items.size
+			override fun getNewListSize() = newList.size
+			override fun areItemsTheSame(old: Int, new: Int) =
+				kotlin.runCatching { bindersSet.find { it.isForItem(items[old]) }?.areItemsSame?.invoke(items[old], newList[new]) ?: false }.getOrElse { false }
+			override fun areContentsTheSame(old: Int, new: Int) =
+				kotlin.runCatching { bindersSet.find { it.isForItem(items[old]) }?.areContentsSame?.invoke(items[old], newList[new]) ?: false }.getOrElse { false }
+		}).dispatchUpdatesTo(this)
+
+		items = newList
+	}
 
 	// view type must be position of binder in bindersSet
 	override fun getItemViewType(position: Int)
