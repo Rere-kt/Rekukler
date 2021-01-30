@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.*
 
 fun RecyclerView.configure(
     adapter: MultiBindingAdapter,
-    block: RecyclerViewConfig.() -> Unit
+    block: RecyclerViewConfig.() -> Unit = {}
 ) {
     RecyclerViewConfig(context).also {
         block(it)

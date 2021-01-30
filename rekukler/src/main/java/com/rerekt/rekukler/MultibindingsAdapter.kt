@@ -31,7 +31,7 @@ open class MultiBindingAdapter(
 
     override fun getItemCount() = items.size
 
-	internal fun updateList(newList: List<Any>) {
+	private fun updateList(newList: List<Any>) {
 		DiffUtil.calculateDiff(object: DiffUtil.Callback() {
 			override fun getOldListSize() = items.size
 			override fun getNewListSize() = newList.size
