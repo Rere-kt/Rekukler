@@ -55,6 +55,14 @@ class RecyclerViewConfig(
         )
     }
 
+    fun staggeredGridLayout(
+        spansCount: Int = 1,
+        orientation: Int = StaggeredGridLayoutManager.VERTICAL,
+        block: StaggeredGridLayoutManager.() -> Unit = {}
+    ) {
+        layoutManager = StaggeredGridLayoutManager(spansCount, orientation).apply(block)
+    }
+
     fun itemTouchHelper(
         dragFlags: Int = ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT,
         swipeFlags: Int = 0,
