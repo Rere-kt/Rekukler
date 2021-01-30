@@ -14,6 +14,7 @@ open class MultiBindingAdapter(
 			updateList(value)
 			field = value
 		}
+	@Suppress("UNCHECKED_CAST")
 	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
 
 	override fun onCreateViewHolder(

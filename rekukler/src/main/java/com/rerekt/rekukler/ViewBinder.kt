@@ -20,8 +20,6 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 ) {
 
     fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
-		// scroll state handling bug
-		// val itemView = AsyncLayout(parent.context).apply { inflateAsync(layoutResId) }
         val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
 		return object : RecyclerView.ViewHolder(itemView) {}
     }
@@ -33,9 +31,6 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
 				holderBinder(item as Type)
 				itemPosition = position
 				bindingBlock.invoke(binder.invoke(viewHolder.itemView), item)
-//				(viewHolder.itemView as AsyncLayout).invokeWhenInflated {
-//					bindingBlock.invoke(binder(getChildAt(0)), item)
-//				}
 			}
     }
 }
