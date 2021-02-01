@@ -71,13 +71,23 @@ class RecyclerViewConfig(
         onClearView: () -> Unit
     ) = ItemTouchHelper(
             object : ItemTouchHelper.Callback() {
-                override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int = makeMovementFlags(dragFlags, swipeFlags)
-                override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean =
-                    onMove(viewHolder, target)
-                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                    onSwiped.invoke(viewHolder, direction)
-                }
-                override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) = onClearView.invoke()
+                override fun getMovementFlags(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ): Int = makeMovementFlags(dragFlags, swipeFlags)
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = onMove.invoke(viewHolder, target)
+                override fun onSwiped(
+                    viewHolder: RecyclerView.ViewHolder,
+                    direction: Int
+                ) = onSwiped.invoke(viewHolder, direction)
+                override fun clearView(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder
+                ) = onClearView.invoke()
             }
     ).apply { itemTouchHelper = this }
 
