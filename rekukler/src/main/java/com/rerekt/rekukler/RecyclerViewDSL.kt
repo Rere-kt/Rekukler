@@ -68,7 +68,7 @@ class RecyclerViewConfig(
         swipeFlags: Int = 0,
         onSwiped: (RecyclerView.ViewHolder, direction: Int) -> Unit = { _, _ -> },
         onMove: (RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean = { _, _ -> true },
-        onClearView: () -> Unit
+        onClearView: () -> Unit = {}
     ) = ItemTouchHelper(
             object : ItemTouchHelper.Callback() {
                 override fun getMovementFlags(
