@@ -1,14 +1,10 @@
 package com.rerekt.sample.ui
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rerekt.rekukler.MultiBindingAdapter
-import com.rerekt.rekukler.configure
-import com.rerekt.rekukler.updateList
+import com.rerekt.rekukler.*
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
@@ -18,7 +14,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
 
     lateinit var binding: FragmentMainBinding
 
-    private val adapter by lazy {
+    private val articlesAdapter by lazy {
         MultiBindingAdapter(
             articlesBinder { println("Click from Article item") },
             loadingBinder()
@@ -35,7 +31,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
 
     @ExperimentalStdlibApi
     private fun postDelayedListUpdate() {
-        adapter.items = buildList {
+        articlesAdapter.items = buildList {
             addAll(
                 (0..10).map {
                     Article(
@@ -50,15 +46,23 @@ class ListFragment: Fragment(R.layout.fragment_main) {
     }
 
     private fun initRecycler() {
-        binding.rvArticles.configure(adapter) {
-            linearLayout {
-                reverseLayout = false
-                orientation = LinearLayoutManager.VERTICAL
+        binding.rvArticles.apply {
+            configure(articlesAdapter) {
+                linearLayout {
+                    reverseLayout = false
+                    orientation = LinearLayoutManager.VERTICAL
+                }
+                dividerItemDecoration(
+                    size = 2.dip(resources).toInt()
+                )
+                itemTouchHelper { draggedHolder, target ->
+                    getItems<Article>()
+                        ?.toList()
+                        ?.swapListItems(draggedHolder.layoutPosition, target.layoutPosition)
+                        ?.let { updateList(it) }
+                    true
+                }
             }
-			dividerItemDecoration(
-				size = 2.dip(resources).toInt()
-			)
         }
     }
-
 }
