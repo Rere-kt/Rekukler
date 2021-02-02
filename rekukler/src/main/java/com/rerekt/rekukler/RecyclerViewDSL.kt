@@ -2,6 +2,7 @@ package com.rerekt.rekukler
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.*
 
@@ -24,6 +25,7 @@ fun RecyclerView.updateList(newList: List<Any>) {
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <T> RecyclerView.getItems() = (adapter as? MultiBindingAdapter)?.items as? List<T>
 
 class RecyclerViewConfig(
@@ -68,18 +70,14 @@ class RecyclerViewConfig(
         swipeFlags: Int = 0,
         onSwiped: (RecyclerView.ViewHolder, direction: Int) -> Unit = { _, _ -> },
         onMove: (RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean = { _, _ -> true },
-        onClearView: () -> Unit = {}
+        onClearView: () -> Unit = {},
+        isCanBeOutOfBounds: Boolean = false
     ) = ItemTouchHelper(
             object : ItemTouchHelper.Callback() {
                 override fun getMovementFlags(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder
                 ): Int = makeMovementFlags(dragFlags, swipeFlags)
-                override fun onMove(
-                    recyclerView: RecyclerView,
-                    viewHolder: RecyclerView.ViewHolder,
-                    target: RecyclerView.ViewHolder
-                ): Boolean = onMove.invoke(viewHolder, target)
                 override fun onSwiped(
                     viewHolder: RecyclerView.ViewHolder,
                     direction: Int
@@ -88,6 +86,20 @@ class RecyclerViewConfig(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder
                 ) = onClearView.invoke()
+                override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+                    if (isCanBeOutOfBounds) {
+                        super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
+                    } else {
+                        val clippedDx  = clip(recyclerView.width, viewHolder.itemView.left, viewHolder.itemView.right, dX)
+                        val clippedDy  = clip(recyclerView.height, viewHolder.itemView.top, viewHolder.itemView.bottom, dY)
+                        super.onChildDraw(c, recyclerView, viewHolder, clippedDx, clippedDy, actionState, isCurrentlyActive)
+                    }
+                }
+                override fun onMove(
+                        recyclerView: RecyclerView,
+                        viewHolder: RecyclerView.ViewHolder,
+                        target: RecyclerView.ViewHolder
+                ): Boolean = onMove.invoke(viewHolder, target)
             }
     ).apply { itemTouchHelper = this }
 
