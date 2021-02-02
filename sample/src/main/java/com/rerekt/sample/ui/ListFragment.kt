@@ -55,19 +55,14 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 dividerItemDecoration(
                     size = 2.dip(resources).toInt()
                 )
-                itemTouchHelper(
-                    onMove = { holder, target ->
-                        getItems<Article>()
-                            ?.toList()
-                            ?.swapListItems(holder.layoutPosition, target.layoutPosition)
-                            ?.let {
-                                updateList(it)
-                            }
-                        true
-                    },
-                )
+                itemTouchHelper { draggedHolder, target ->
+                    getItems<Article>()
+                        ?.toList()
+                        ?.swapListItems(draggedHolder.layoutPosition, target.layoutPosition)
+                        ?.let { updateList(it) }
+                    true
+                }
             }
         }
-
     }
 }
