@@ -1,5 +1,6 @@
 package com.rerekt.sample.ui.global.list
 
+import androidx.core.content.ContextCompat
 import com.rerekt.rekukler.viewBinder
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.ListItemBinding
@@ -20,6 +21,15 @@ fun articlesBinder(
     areContentsSame = { old, new -> old == new },
 ) {
 	bindView { data ->
+        llContainer.setBackgroundColor(
+            ContextCompat.getColor(
+                itemView.context,
+                if (position % 2 == 0)
+                    android.R.color.holo_red_dark
+                else
+                    android.R.color.holo_green_dark
+            )
+        )
         tvTitle.text = data.title
         tvDescription.text = data.description
         tvPosition.text = getString(R.string.position, position)

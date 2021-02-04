@@ -71,7 +71,7 @@ class RecyclerViewConfig(
         onSwiped: (RecyclerView.ViewHolder, direction: Int) -> Unit = { _, _ -> },
         onClearView: () -> Unit = {},
         isCanBeOutOfBounds: Boolean = false,
-        onMove: (RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean = { _, _ -> true }
+        onMove: ((RecyclerView.ViewHolder, RecyclerView.ViewHolder) -> Boolean)? = null
     ) = ItemTouchHelper(
             object : ItemTouchHelper.Callback() {
                 override fun getMovementFlags(
@@ -87,6 +87,7 @@ class RecyclerViewConfig(
                     viewHolder: RecyclerView.ViewHolder
                 ) = onClearView.invoke()
                 override fun onChildDraw(c: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
+                    viewHolder.itemView.outlineProvider = null
                     if (isCanBeOutOfBounds) {
                         super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
                     } else {
@@ -96,10 +97,10 @@ class RecyclerViewConfig(
                     }
                 }
                 override fun onMove(
-                        recyclerView: RecyclerView,
-                        viewHolder: RecyclerView.ViewHolder,
-                        target: RecyclerView.ViewHolder
-                ): Boolean = onMove.invoke(viewHolder, target)
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean = onMove?.invoke(viewHolder, target) ?: (recyclerView.adapter as? MultiBindingAdapter)?.onItemMove(viewHolder.adapterPosition, target.adapterPosition) ?: false
             }
     ).apply { itemTouchHelper = this }
 
