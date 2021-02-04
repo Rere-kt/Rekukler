@@ -52,8 +52,14 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                     reverseLayout = false
                     orientation = LinearLayoutManager.VERTICAL
                 }
-                dividerItemDecoration(
-                    size = 2.dip(resources).toInt()
+                itemDecoration(
+                    MarginDividerItemDecoration(
+                        orientation = LinearLayout.VERTICAL,
+                        dividerLineWidth = 2.dip(resources).int,
+                        decorationSize = 16.dip(resources).int,
+                        dividerLineMargin = 12.dip(resources),
+                        dividerLineColorRes = R.color.black
+                    )
                 )
                 itemTouchHelper { draggedHolder, target ->
                     getItems<Article>()
