@@ -2,12 +2,14 @@ package com.rerekt.sample.ui
 
 import android.os.Bundle
 import android.view.View
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rerekt.rekukler.*
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
+import com.rerekt.sample.ui.global.int
 import com.rerekt.sample.ui.global.list.*
 
 class ListFragment: Fragment(R.layout.fragment_main) {
@@ -26,11 +28,11 @@ class ListFragment: Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         initRecycler()
-        postDelayedListUpdate()
+        fillAdapterItems()
     }
 
     @ExperimentalStdlibApi
-    private fun postDelayedListUpdate() {
+    private fun fillAdapterItems() {
         articlesAdapter.items = buildList {
             addAll(
                 (0..10).map {
@@ -52,8 +54,14 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                     reverseLayout = false
                     orientation = LinearLayoutManager.VERTICAL
                 }
-                dividerItemDecoration(
-                    size = 2.dip(resources).toInt()
+                itemDecoration(
+                    MarginDividerItemDecoration(
+                        orientation = LinearLayout.VERTICAL,
+                        dividerLineWidth = 2.dip(resources),
+                        decorationSize = 16.dip(resources).int,
+                        dividerLineMargin = 12.dip(resources),
+                        dividerLineColorRes = R.color.black
+                    )
                 )
                 itemTouchHelper { draggedHolder, target ->
                     getItems<Article>()

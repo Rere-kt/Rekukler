@@ -9,3 +9,6 @@ fun Int.dip(resource: Resources) =
         this.toFloat(),
         resource.displayMetrics
     )
+
+val Float.int: Int
+    get() = toInt()
