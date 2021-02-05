@@ -12,9 +12,11 @@ class MarginDividerItemDecoration constructor(
     private val orientation: Int = LinearLayout.VERTICAL,
     private val dividerLineMargin: Float = 0f,
     @ColorRes private val dividerLineColorRes: Int = android.R.color.black,
-    private val decorationSize: Int = 0,
-    private val dividerLineWidth: Float = 0f
+    private val dividerLineWidth: Float = 0f,
+    decorationSize: Int = 0
 ): ItemDecoration() {
+
+    private val decorationFullSize: Float = decorationSize + dividerLineWidth
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if (orientation == LinearLayout.VERTICAL)
@@ -30,7 +32,7 @@ class MarginDividerItemDecoration constructor(
         if (childCount == 0) return
         for (i in 0 until childCount - 1) {
             val child = parent.getChildAt(i)
-            val top = (child.bottom + decorationSize / 2).toFloat()
+            val top = child.bottom + decorationFullSize / 2
             val bottom = top
             canvas.drawLine(
                 left + dividerLineMargin,
@@ -52,7 +54,7 @@ class MarginDividerItemDecoration constructor(
         if (childCount == 0) return
         for (i in 0 until childCount - 1) {
             val child = parent.getChildAt(i)
-            val left = (child.right + decorationSize / 2).toFloat()
+            val left = child.right + decorationFullSize / 2
             val right = left
             canvas.drawLine(
                 left,
@@ -75,9 +77,9 @@ class MarginDividerItemDecoration constructor(
     ) {
         if (parent.getChildAdapterPosition(view) != parent.adapter?.itemCount?.minus(1)) {
             if (orientation == LinearLayout.VERTICAL)
-                outRect.bottom = decorationSize
+                outRect.bottom = decorationFullSize.toInt()
             else
-                outRect.right = decorationSize
+                outRect.right = decorationFullSize.toInt()
         }
     }
 
