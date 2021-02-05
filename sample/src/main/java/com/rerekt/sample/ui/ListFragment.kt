@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.rerekt.rekukler.*
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
@@ -35,7 +34,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
     private fun fillAdapterItems() {
         articlesAdapter.items = buildList {
             addAll(
-                (0..10).map {
+                (0..20).map {
                     Article(
                         id = it,
                         title = "Title#$it",
@@ -51,8 +50,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
         binding.rvArticles.apply {
             configure(articlesAdapter) {
                 linearLayout {
-                    reverseLayout = false
-                    orientation = LinearLayoutManager.VERTICAL
+                    orientation = LinearLayout.VERTICAL
                 }
                 itemDecoration(
                     MarginDividerItemDecoration(
@@ -63,13 +61,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                         dividerLineColorRes = R.color.black
                     )
                 )
-                itemTouchHelper { draggedHolder, target ->
-                    getItems<Article>()
-                        ?.toList()
-                        ?.swapListItems(draggedHolder.layoutPosition, target.layoutPosition)
-                        ?.let { updateList(it) }
-                    true
-                }
+                itemTouchHelper()
             }
         }
     }

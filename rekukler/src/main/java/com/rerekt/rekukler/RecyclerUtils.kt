@@ -1,7 +1,5 @@
 package com.rerekt.rekukler
 
-import java.util.*
-
 //Function for clip the borders
 internal fun clip(size: Int, start: Int, end: Int, delta: Float): Float {
     val newStart = start + delta
@@ -16,16 +14,3 @@ internal fun clip(size: Int, start: Int, end: Int, delta: Float): Float {
         else -> delta
     }
 }
-
-fun <T>List<T>.swapListItems(fromPosition: Int, toPosition: Int): List<T> =
-        apply {
-            if (fromPosition < toPosition) {
-                for (i in fromPosition until toPosition) {
-                    Collections.swap(this, i, i + 1)
-                }
-            } else {
-                for (i in fromPosition downTo toPosition + 1) {
-                    Collections.swap(this, i, i - 1)
-                }
-            }
-        }
