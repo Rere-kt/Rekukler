@@ -1,4 +1,4 @@
-package com.rerekt.rekukler
+package com.rerekt.rekukler.utils
 
 import android.graphics.*
 import androidx.recyclerview.widget.RecyclerView

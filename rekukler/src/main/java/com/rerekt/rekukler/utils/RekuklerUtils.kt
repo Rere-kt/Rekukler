@@ -1,4 +1,4 @@
-package com.rerekt.rekukler
+package com.rerekt.rekukler.utils
 
 //Function for clip the borders
 internal fun clip(size: Int, start: Int, end: Int, delta: Float): Float {

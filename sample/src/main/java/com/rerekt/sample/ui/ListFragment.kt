@@ -5,6 +5,11 @@ import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.rerekt.rekukler.*
+import com.rerekt.rekukler.dsl.configure
+import com.rerekt.rekukler.dsl.itemDecoration
+import com.rerekt.rekukler.dsl.itemTouchHelper
+import com.rerekt.rekukler.dsl.linearLayout
+import com.rerekt.rekukler.utils.MarginDividerItemDecoration
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
