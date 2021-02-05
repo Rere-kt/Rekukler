@@ -28,11 +28,11 @@ class ListFragment: Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         initRecycler()
-        postDelayedListUpdate()
+        fillAdapterItems()
     }
 
     @ExperimentalStdlibApi
-    private fun postDelayedListUpdate() {
+    private fun fillAdapterItems() {
         articlesAdapter.items = buildList {
             addAll(
                 (0..10).map {
@@ -57,7 +57,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 itemDecoration(
                     MarginDividerItemDecoration(
                         orientation = LinearLayout.VERTICAL,
-                        dividerLineWidth = 2.dip(resources).int,
+                        dividerLineWidth = 2.dip(resources),
                         decorationSize = 16.dip(resources).int,
                         dividerLineMargin = 12.dip(resources),
                         dividerLineColorRes = R.color.black

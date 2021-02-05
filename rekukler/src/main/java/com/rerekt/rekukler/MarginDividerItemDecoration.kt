@@ -8,39 +8,38 @@ import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 
-
 class MarginDividerItemDecoration constructor(
-    private val orientation: Int = VERTICAL,
-    private var dividerLineMargin: Float = 0f,
-    @ColorRes private var dividerLineColorRes: Int = android.R.color.black,
-    decorationSize: Int = 0,
-    dividerLineWidth: Int = 0
+    private val orientation: Int = LinearLayout.VERTICAL,
+    private val dividerLineMargin: Float = 0f,
+    @ColorRes private val dividerLineColorRes: Int = android.R.color.black,
+    private val decorationSize: Int = 0,
+    private val dividerLineWidth: Float = 0f
 ): ItemDecoration() {
 
-    private var decoratorSize: Int = decorationSize
-    private var dividerLineWidth: Float = dividerLineWidth.toFloat()
+    private val paint by lazy { Paint() }
 
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
-        if (orientation == HORIZONTAL)
-            drawHorizontal(canvas, parent)
-        else
+        if (orientation == LinearLayout.VERTICAL)
             drawVertical(canvas, parent)
+        else
+            drawHorizontal(canvas, parent)
     }
 
     private fun drawVertical(canvas: Canvas, parent: RecyclerView) {
         val left = parent.paddingLeft
         val right = parent.width - parent.paddingRight
         val childCount = parent.childCount
+        if (childCount == 0) return
         for (i in 0 until childCount - 1) {
             val child = parent.getChildAt(i)
-            val top = (child.bottom + decoratorSize / 2).toFloat()
+            val top = (child.bottom + decorationSize / 2).toFloat()
             val bottom = top
             canvas.drawLine(
                 left + dividerLineMargin,
                 top,
                 right - dividerLineMargin,
                 bottom,
-                Paint().apply {
+                paint.apply {
                     color = ContextCompat.getColor(parent.context, dividerLineColorRes)
                     strokeWidth = dividerLineWidth
                 }
@@ -52,16 +51,17 @@ class MarginDividerItemDecoration constructor(
         val top = parent.paddingTop
         val bottom = parent.height - parent.paddingBottom
         val childCount = parent.childCount
+        if (childCount == 0) return
         for (i in 0 until childCount - 1) {
             val child = parent.getChildAt(i)
-            val left = (child.right + decoratorSize / 2).toFloat()
+            val left = (child.right + decorationSize / 2).toFloat()
             val right = left
             canvas.drawLine(
                 left,
                 top + dividerLineMargin,
                 right,
                 bottom - dividerLineMargin,
-                Paint().apply {
+                paint.apply {
                     color = ContextCompat.getColor(parent.context, dividerLineColorRes)
                     strokeWidth = dividerLineWidth
                 }
@@ -76,16 +76,11 @@ class MarginDividerItemDecoration constructor(
         state: RecyclerView.State
     ) {
         if (parent.getChildAdapterPosition(view) != parent.adapter?.itemCount?.minus(1)) {
-            if (orientation == HORIZONTAL)
-                outRect.right = decoratorSize
+            if (orientation == LinearLayout.VERTICAL)
+                outRect.bottom = decorationSize
             else
-                outRect.bottom = decoratorSize
+                outRect.right = decorationSize
         }
-    }
-
-    companion object {
-        private const val HORIZONTAL = LinearLayout.HORIZONTAL
-        private const val VERTICAL = LinearLayout.VERTICAL
     }
 
 }
