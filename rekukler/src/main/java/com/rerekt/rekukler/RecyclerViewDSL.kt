@@ -100,7 +100,7 @@ class RecyclerViewConfig(
                     recyclerView: RecyclerView,
                     viewHolder: RecyclerView.ViewHolder,
                     target: RecyclerView.ViewHolder
-                ): Boolean = onMove?.invoke(viewHolder, target) ?: (recyclerView.adapter as? MultiBindingAdapter)?.moveItems(viewHolder.adapterPosition, target.adapterPosition) ?: false
+                ): Boolean = onMove?.invoke(viewHolder, target) ?: (recyclerView.adapter as? MultiBindingAdapter)?.moveItem(viewHolder.adapterPosition, target.adapterPosition) ?: false
             }
     ).apply { itemTouchHelper = this }
 
