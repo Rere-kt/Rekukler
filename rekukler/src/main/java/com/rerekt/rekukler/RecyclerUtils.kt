@@ -1,7 +1,5 @@
 package com.rerekt.rekukler
 
-import java.util.*
-
 //Function for clip the borders
 internal fun clip(size: Int, start: Int, end: Int, delta: Float): Float {
     val newStart = start + delta

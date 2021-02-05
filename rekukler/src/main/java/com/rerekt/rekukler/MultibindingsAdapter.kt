@@ -8,7 +8,7 @@ import java.util.Collections
 
 open class MultiBindingAdapter(
 	vararg binders: ViewBinder<*, *>
-): RecyclerView.Adapter<RecyclerView.ViewHolder>(), ItemTouchHelperAdapter {
+): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var items: List<Any> = listOf()
 		set(value) {
@@ -66,7 +66,7 @@ open class MultiBindingAdapter(
 		)
     }
 
-	override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+	fun moveItems(fromPosition: Int, toPosition: Int): Boolean {
 		if (fromPosition < toPosition) {
 			for (i in fromPosition until toPosition) {
 				Collections.swap(items.toList(), i, i + 1)
