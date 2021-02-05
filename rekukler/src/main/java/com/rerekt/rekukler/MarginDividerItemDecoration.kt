@@ -16,8 +16,6 @@ class MarginDividerItemDecoration constructor(
     private val dividerLineWidth: Float = 0f
 ): ItemDecoration() {
 
-    private val paint by lazy { Paint() }
-
     override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
         if (orientation == LinearLayout.VERTICAL)
             drawVertical(canvas, parent)
@@ -39,7 +37,7 @@ class MarginDividerItemDecoration constructor(
                 top,
                 right - dividerLineMargin,
                 bottom,
-                paint.apply {
+                Paint().apply {
                     color = ContextCompat.getColor(parent.context, dividerLineColorRes)
                     strokeWidth = dividerLineWidth
                 }
@@ -61,7 +59,7 @@ class MarginDividerItemDecoration constructor(
                 top + dividerLineMargin,
                 right,
                 bottom - dividerLineMargin,
-                paint.apply {
+                Paint().apply {
                     color = ContextCompat.getColor(parent.context, dividerLineColorRes)
                     strokeWidth = dividerLineWidth
                 }
