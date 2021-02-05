@@ -56,9 +56,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 }
                 itemDecoration(
                     MarginDividerItemDecoration(
-                        orientation = LinearLayout.VERTICAL,
-                        dividerLineWidth = 2.dip(resources),
-                        decorationSize = 16.dip(resources).int,
+                        dividerLineWidth = 1.dip(resources),
                         dividerLineMargin = 12.dip(resources),
                         dividerLineColorRes = R.color.black
                     )
