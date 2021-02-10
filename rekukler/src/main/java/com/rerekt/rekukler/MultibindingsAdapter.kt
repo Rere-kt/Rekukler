@@ -25,9 +25,6 @@ open class MultiBindingAdapter(
 			updateList(value)
 			field = value
 		}
-		get() = mutableItems
-
-	private var mutableItems: MutableList<Any> = mutableListOf()
 
 	@Suppress("UNCHECKED_CAST")
 	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
@@ -58,26 +55,27 @@ open class MultiBindingAdapter(
 	 * Updating list using DiffUtil, can be called only in [items] setter
 	 */
 	private fun updateList(newList: List<Any>) {
-		mutableItems = newList.toMutableList()
-		DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-			override fun getOldListSize() = items.size
-			override fun getNewListSize() = newList.size
-			override fun areItemsTheSame(old: Int, new: Int) =
-				kotlin.runCatching {
-					bindersSet.find { it.isForItem(items[old]) }?.areItemsSame?.invoke(
-						items[old],
-						newList[new]
-					) ?: false
-				}.getOrElse { false }
+		DiffUtil.calculateDiff(
+			object : DiffUtil.Callback() {
+				override fun getOldListSize() = items.size
+				override fun getNewListSize() = newList.size
+				override fun areItemsTheSame(old: Int, new: Int) =
+					kotlin.runCatching {
+						bindersSet.find { it.isForItem(items[old]) }?.areItemsSame?.invoke(
+							items[old],
+							newList[new]
+						) ?: false
+					}.getOrElse { false }
 
-			override fun areContentsTheSame(old: Int, new: Int) =
-				kotlin.runCatching {
-					bindersSet.find { it.isForItem(items[old]) }?.areContentsSame?.invoke(
-						items[old],
-						newList[new]
-					) ?: false
-				}.getOrElse { false }
-		}).dispatchUpdatesTo(this)
+				override fun areContentsTheSame(old: Int, new: Int) =
+					kotlin.runCatching {
+						bindersSet.find { it.isForItem(items[old]) }?.areContentsSame?.invoke(
+							items[old],
+							newList[new]
+						) ?: false
+					}.getOrElse { false }
+			}
+		).dispatchUpdatesTo(this)
 	}
 
 	// view type must be position of binder in bindersSet
@@ -90,16 +88,17 @@ open class MultiBindingAdapter(
 	 * @param toPosition - target position
 	 */
 	fun moveItem(fromPosition: Int, toPosition: Int): Boolean {
+		val swappedList = mutableListOf<Any>().apply { items.forEach(::add) }
 		if (fromPosition < toPosition) {
 			for (i in fromPosition until toPosition) {
-				Collections.swap(mutableItems, i, i + 1)
+				Collections.swap(swappedList, i, i + 1)
 			}
 		} else {
 			for (i in fromPosition downTo toPosition + 1) {
-				Collections.swap(mutableItems, i, i - 1)
+				Collections.swap(swappedList, i, i - 1)
 			}
 		}
-		notifyItemMoved(fromPosition, toPosition)
+		items = swappedList
 		return true
 	}
 }
