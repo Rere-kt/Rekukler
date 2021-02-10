@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import java.util.Collections
 
 /**
  * Main adapter class, which implements androidx.RecyclerView.
@@ -25,6 +24,9 @@ open class MultiBindingAdapter(
 			updateList(value)
 			field = value
 		}
+		get() = mutableItems
+
+	private var mutableItems: MutableList<Any> = mutableListOf()
 
 	@Suppress("UNCHECKED_CAST")
 	val bindersSet = binders.toList() as List<ViewBinder<Any, ViewBinding>>
@@ -55,6 +57,7 @@ open class MultiBindingAdapter(
 	 * Updating list using DiffUtil, can be called only in [items] setter
 	 */
 	private fun updateList(newList: List<Any>) {
+		mutableItems = newList.toMutableList()
 		DiffUtil.calculateDiff(object : DiffUtil.Callback() {
 			override fun getOldListSize() = items.size
 			override fun getNewListSize() = newList.size
@@ -88,11 +91,11 @@ open class MultiBindingAdapter(
 	fun moveItem(fromPosition: Int, toPosition: Int): Boolean {
 		if (fromPosition < toPosition) {
 			for (i in fromPosition until toPosition) {
-				Collections.swap(items.toList(), i, i + 1)
+				mutableItems[i] = mutableItems.set(i + 1, mutableItems[i]);
 			}
 		} else {
-			for (i in fromPosition downTo toPosition + 1) {
-				Collections.swap(items.toList(), i, i - 1)
+			for (i in  toPosition + 1 downTo fromPosition) {
+				mutableItems[i] = mutableItems.set(i - 1, mutableItems[i]);
 			}
 		}
 		notifyItemMoved(fromPosition, toPosition)
