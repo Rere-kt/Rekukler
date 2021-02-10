@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import java.util.*
 
 /**
  * Main adapter class, which implements androidx.RecyclerView.
@@ -91,11 +92,11 @@ open class MultiBindingAdapter(
 	fun moveItem(fromPosition: Int, toPosition: Int): Boolean {
 		if (fromPosition < toPosition) {
 			for (i in fromPosition until toPosition) {
-				mutableItems[i] = mutableItems.set(i + 1, mutableItems[i]);
+				Collections.swap(mutableItems, i, i + 1)
 			}
 		} else {
-			for (i in  toPosition + 1 downTo fromPosition) {
-				mutableItems[i] = mutableItems.set(i - 1, mutableItems[i]);
+			for (i in fromPosition downTo toPosition + 1) {
+				Collections.swap(mutableItems, i, i - 1)
 			}
 		}
 		notifyItemMoved(fromPosition, toPosition)
