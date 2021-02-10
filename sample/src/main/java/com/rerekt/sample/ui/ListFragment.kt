@@ -1,10 +1,12 @@
 package com.rerekt.sample.ui
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
-import com.rerekt.rekukler.*
+import com.rerekt.rekukler.MultiBindingAdapter
 import com.rerekt.rekukler.dsl.configure
 import com.rerekt.rekukler.dsl.itemDecoration
 import com.rerekt.rekukler.dsl.itemTouchHelper
@@ -13,7 +15,6 @@ import com.rerekt.rekukler.utils.MarginDividerItemDecoration
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
-import com.rerekt.sample.ui.global.int
 import com.rerekt.sample.ui.global.list.*
 
 class ListFragment: Fragment(R.layout.fragment_main) {
@@ -37,18 +38,20 @@ class ListFragment: Fragment(R.layout.fragment_main) {
 
     @ExperimentalStdlibApi
     private fun fillAdapterItems() {
-        articlesAdapter.items = buildList {
-            addAll(
-                (0..20).map {
-                    Article(
-                        id = it,
-                        title = "Title#$it",
-                        description = "Description#$it"
-                    )
-                }
-            )
-            add(Loading)
-        }
+        Handler(Looper.getMainLooper()).postDelayed(
+            { articlesAdapter.items = buildList {
+                addAll(
+                    (0..20).map {
+                        Article(
+                            id = it,
+                            title = "Title#$it",
+                            description = "Description#$it"
+                        )
+                    }
+                )
+                add(Loading)
+            } }, 1000
+        )
     }
 
     private fun initRecycler() {
