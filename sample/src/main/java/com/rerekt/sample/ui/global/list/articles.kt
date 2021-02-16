@@ -35,4 +35,13 @@ fun articlesBinder(
         tvPosition.text = getString(R.string.position, position)
         setOnClickListener { onClick.invoke(data) }
 	}
+
+    onDetachedFromWindow {
+        println("on item detached from window")
+    }
+
+    onAttachedToWindow {
+        println("on item attached to window")
+    }
+
 }
