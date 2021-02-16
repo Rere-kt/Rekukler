@@ -21,7 +21,6 @@ fun articlesBinder(
     areContentsSame = { old, new -> old == new },
 ) {
 	bindView { data ->
-        println("on item bind")
         llContainer.setBackgroundColor(
             ContextCompat.getColor(
                 itemView.context,
