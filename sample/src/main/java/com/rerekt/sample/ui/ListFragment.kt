@@ -13,7 +13,6 @@ import com.rerekt.rekukler.utils.MarginDividerItemDecoration
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
-import com.rerekt.sample.ui.global.int
 import com.rerekt.sample.ui.global.list.*
 
 class ListFragment: Fragment(R.layout.fragment_main) {

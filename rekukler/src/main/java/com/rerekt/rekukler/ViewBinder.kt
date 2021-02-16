@@ -16,23 +16,55 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
         val isForItem: (item: Any) -> Boolean,
         val areItemsSame: (Type, Type) -> Boolean,
         val areContentsSame: (Type, Type) -> Boolean,
-        private val holderBinder: Holder<Type, Binding>.(Type) -> Unit
+        private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit
 ) {
 
-    fun createViewHolder(parent: ViewGroup): RecyclerView.ViewHolder {
+    fun createViewHolder(parent: ViewGroup): RekuklerViewHolder<Type, Binding> {
         val itemView = LayoutInflater.from(parent.context).inflate(layoutResId, parent, false)
-		return object : RecyclerView.ViewHolder(itemView) {}
+		return RekuklerViewHolder(
+			itemView = itemView,
+			binder = binder,
+			holderBinder = holderBinder
+		)
     }
 
     @Suppress("UNCHECKED_CAST")
-	fun bindViewHolder(viewHolder: RecyclerView.ViewHolder, item: Any, position: Int) {
-		Holder<Type, Binding>(viewHolder)
-			.apply {
-				holderBinder(item as Type)
-				itemPosition = position
-				bindingBlock.invoke(binder.invoke(viewHolder.itemView), item)
-			}
+	fun bindViewHolder(viewHolder: RekuklerViewHolder<*, *>, item: Any, position: Int) {
+		viewHolder.bind(item, position)
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+open class RekuklerViewHolder<Type: Any, Binding: ViewBinding>(
+	itemView: View,
+	val binder: (View) -> Binding,
+	private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit
+) : RecyclerView.ViewHolder(itemView) {
+
+	internal val holder = HolderBinder<Type, Binding>(this)
+	private var binding: Binding? = null
+
+	fun bind(item: Any, position: Int) {
+		holder.apply {
+			binding = binder.invoke(viewHolder.itemView)
+			holderBinder(item as Type)
+			itemPosition = position
+			bindingBlock.invoke(binding!!, item)
+		}
+	}
+
+	fun onDetachedFromWindow() {
+		binding?.let {
+			holder.onDetachedFromWindow.invoke(it)
+		}
+	}
+
+	fun onAttachedToWindow() {
+		binding?.let {
+			holder.onAttachedToWindow.invoke(it)
+		}
+	}
+
 }
 
 inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
@@ -41,21 +73,24 @@ inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
         noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline binder: (View) -> Binder,
-        noinline holder: Holder<Type, Binder>.(Type) -> Unit = {}
+        noinline holderBinder: HolderBinder<Type, Binder>.(Type) -> Unit = {}
 ) = ViewBinder(
         layoutResId = layoutResId,
         binder = binder,
         isForItem = isForItem,
         areItemsSame = areItemsSame,
         areContentsSame = areContentsSame,
-		holderBinder = holder
+		holderBinder = holderBinder
 )
 
-class Holder<Type: Any, Binding: ViewBinding>(
+class HolderBinder<Type: Any, Binding: ViewBinding>(
 	val viewHolder: RecyclerView.ViewHolder
 ) {
 
 	internal var bindingBlock: Binding.(Type) -> Unit  = {}
+	internal var onDetachedFromWindow: Binding.() -> Unit = {}
+	internal var onAttachedToWindow: Binding.() -> Unit = {}
+
 	internal var itemPosition = 0
 
     val itemView: View
@@ -66,6 +101,14 @@ class Holder<Type: Any, Binding: ViewBinding>(
 
 	fun bindView(bindingBlock: Binding.(Type) -> Unit) {
 		this.bindingBlock = bindingBlock
+	}
+
+	fun onDetachedFromWindow(b: Binding.() -> Unit) {
+		this.onDetachedFromWindow = b
+	}
+
+	fun onAttachedToWindow(b: Binding.() -> Unit) {
+		this.onAttachedToWindow = b
 	}
 
 	fun getString(@StringRes resId: Int): String = itemView.context.getString(resId)

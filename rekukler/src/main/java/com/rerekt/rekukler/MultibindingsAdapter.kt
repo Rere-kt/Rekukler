@@ -39,7 +39,11 @@ open class MultiBindingAdapter(
 		)
 
     override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
-            getBinder(position).bindViewHolder(viewHolder, items[position], position)
+    	getBinder(position).bindViewHolder(
+			viewHolder = viewHolder as RekuklerViewHolder<*, *>,
+			position = position,
+			item = items[position]
+    	)
 
 	private fun getBinder(position: Int): ViewBinder<*, *> {
 		val item = items[position]
@@ -47,6 +51,16 @@ open class MultiBindingAdapter(
 			value = bindersSet.find { it.isForItem(item) },
 			lazyMessage = { "Unnable to find ViewBinder for ${item::class}" }
 		)
+	}
+
+	override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+		(holder as RekuklerViewHolder<*, *>).onDetachedFromWindow()
+		super.onViewDetachedFromWindow(holder)
+	}
+
+	override fun onViewAttachedToWindow(holder: RecyclerView.ViewHolder) {
+		(holder as RekuklerViewHolder<*, *>).onAttachedToWindow()
+		super.onViewAttachedToWindow(holder)
 	}
 
     override fun getItemCount() = items.size
