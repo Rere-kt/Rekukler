@@ -34,16 +34,18 @@ class MarginDividerItemDecoration constructor(
             val child = parent.getChildAt(i)
             val top = child.bottom + decorationFullSize / 2
             val bottom = top
-            canvas.drawLine(
-                left + dividerLineMargin,
-                top,
-                right - dividerLineMargin,
-                bottom,
-                Paint().apply {
-                    color = ContextCompat.getColor(parent.context, dividerLineColorRes)
-                    strokeWidth = dividerLineWidth
-                }
-            )
+            if (dividerLineWidth != 0f) {
+                canvas.drawLine(
+                    left + dividerLineMargin,
+                    top,
+                    right - dividerLineMargin,
+                    bottom,
+                    Paint().apply {
+                        color = ContextCompat.getColor(parent.context, dividerLineColorRes)
+                        strokeWidth = dividerLineWidth
+                    }
+                )
+            }
         }
     }
 
@@ -56,16 +58,18 @@ class MarginDividerItemDecoration constructor(
             val child = parent.getChildAt(i)
             val left = child.right + decorationFullSize / 2
             val right = left
-            canvas.drawLine(
-                left,
-                top + dividerLineMargin,
-                right,
-                bottom - dividerLineMargin,
-                Paint().apply {
-                    color = ContextCompat.getColor(parent.context, dividerLineColorRes)
-                    strokeWidth = dividerLineWidth
-                }
-            )
+            if (dividerLineWidth != 0f) {
+                canvas.drawLine(
+                    left,
+                    top + dividerLineMargin,
+                    right,
+                    bottom - dividerLineMargin,
+                    Paint().apply {
+                        color = ContextCompat.getColor(parent.context, dividerLineColorRes)
+                        strokeWidth = dividerLineWidth
+                    }
+                )
+            }
         }
     }
 
