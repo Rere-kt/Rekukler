@@ -80,7 +80,7 @@ binding.rvArticles.configure(articlesAdapter) {
   }
 ```
 
-Also we can use ```configure``` extension without any arguments. 
+Also we can use ```configure``` extension with only adater. 
 LinearLayout with vertical orientation will be used as default.
 
 ```kotlin
