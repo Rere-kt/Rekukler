@@ -38,12 +38,27 @@ open class MultiBindingAdapter(
 			lazyMessage = { "Unnable to find ViewBinder for viewType $viewType" }
 		)
 
-    override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) =
-    	getBinder(position).bindViewHolder(
+	override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
+		getBinder(position).bindViewHolder(
 			viewHolder = viewHolder as RekuklerViewHolder<*, *>,
 			position = position,
-			item = items[position]
-    	)
+			item = items[position],
+			payloads = listOf()
+		)
+	}
+
+	override fun onBindViewHolder(
+		viewHolder: RecyclerView.ViewHolder,
+		position: Int,
+		payloads: MutableList<Any>
+	) {
+		getBinder(position).bindViewHolder(
+			viewHolder = viewHolder as RekuklerViewHolder<*, *>,
+			position = position,
+			item = items[position],
+			payloads = payloads
+		)
+	}
 
 	private fun getBinder(position: Int): ViewBinder<*, *> {
 		val item = items[position]
@@ -88,6 +103,15 @@ open class MultiBindingAdapter(
 							newList[new]
 						) ?: false
 					}.getOrElse { false }
+
+				override fun getChangePayload(old: Int, new: Int): Any? =
+					kotlin.runCatching {
+						bindersSet.find { it.isForItem(items[old]) }?.getChangePayload?.invoke(
+							items[old],
+							newList[new]
+						).takeIf { !it.isNullOrEmpty() }
+					}.getOrDefault(super.getChangePayload(old, new))
+
 			}
 		).dispatchUpdatesTo(this)
 	}
@@ -115,4 +139,5 @@ open class MultiBindingAdapter(
 		items = swappedList
 		return true
 	}
+
 }

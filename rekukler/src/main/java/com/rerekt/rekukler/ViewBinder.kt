@@ -1,12 +1,9 @@
 package com.rerekt.rekukler
 
-import android.content.res.ColorStateList
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.*
-import androidx.core.content.ContextCompat
+import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -16,6 +13,7 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
         val isForItem: (item: Any) -> Boolean,
         val areItemsSame: (Type, Type) -> Boolean,
         val areContentsSame: (Type, Type) -> Boolean,
+		val getChangePayload: (Type, Type) -> List<BasePayload<Type>>,
         private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit
 ) {
 
@@ -29,27 +27,43 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
     }
 
     @Suppress("UNCHECKED_CAST")
-	fun bindViewHolder(viewHolder: RekuklerViewHolder<*, *>, item: Any, position: Int) {
-		viewHolder.bind(item, position)
+	fun bindViewHolder(
+		viewHolder: RekuklerViewHolder<*, *>,
+		item: Any,
+		position: Int,
+		payloads: List<Any>
+	) {
+		viewHolder.bind(item, position, (payloads as? List<List<Any>>).orEmpty())
     }
+
 }
 
 @Suppress("UNCHECKED_CAST")
 open class RekuklerViewHolder<Type: Any, Binding: ViewBinding>(
 	itemView: View,
 	val binder: (View) -> Binding,
-	private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit
+	private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit,
 ) : RecyclerView.ViewHolder(itemView) {
 
-	internal val holder = HolderBinder<Type, Binding>(this)
+	private val holder = HolderBinder<Type, Binding>(this)
 	private var binding: Binding? = null
 
-	fun bind(item: Any, position: Int) {
+	fun bind(
+		item: Any,
+		position: Int,
+		payloads: List<List<Any>>
+	) {
+		val typePayloads = payloads.flatten().filterIsInstance<BasePayload<Type>>()
+
 		holder.apply {
-			binding = binder.invoke(viewHolder.itemView)
-			holderBinder(item as Type)
+			if (binding == null || typePayloads.isEmpty()) {
+				binding = binder.invoke(viewHolder.itemView)
+				holderBinder(item as Type)
+				bindingBlock.invoke(binding!!, item)
+			} else {
+				payloadHandlerBlock.invoke(binding!!, item as Type, typePayloads)
+			}
 			itemPosition = position
-			bindingBlock.invoke(binding!!, item)
 		}
 	}
 
@@ -72,28 +86,31 @@ inline fun <reified Type: Any, Binder: ViewBinding> viewBinder(
         noinline isForItem: (item: Any) -> Boolean = { it is Type },
         noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
         noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
-        noinline binder: (View) -> Binder,
-        noinline holderBinder: HolderBinder<Type, Binder>.(Type) -> Unit = {}
+        noinline getChangePayload: (Type, Type) -> List<BasePayload<Type>> = { old, new -> listOf() },
+		noinline binder: (View) -> Binder,
+		noinline holderBinder: HolderBinder<Type, Binder>.(Type) -> Unit = {}
 ) = ViewBinder(
-        layoutResId = layoutResId,
-        binder = binder,
-        isForItem = isForItem,
-        areItemsSame = areItemsSame,
-        areContentsSame = areContentsSame,
-		holderBinder = holderBinder
+	layoutResId = layoutResId,
+	binder = binder,
+	isForItem = isForItem,
+	areItemsSame = areItemsSame,
+	areContentsSame = areContentsSame,
+	getChangePayload = getChangePayload,
+	holderBinder = holderBinder
 )
 
 class HolderBinder<Type: Any, Binding: ViewBinding>(
 	val viewHolder: RecyclerView.ViewHolder
-) {
+): ViewHolderManager {
 
 	internal var bindingBlock: Binding.(Type) -> Unit  = {}
+	internal var payloadHandlerBlock: Binding.(Type, List<BasePayload<Type>>) -> Unit  = { _, _ ->}
 	internal var onDetachedFromWindow: Binding.() -> Unit = {}
 	internal var onAttachedToWindow: Binding.() -> Unit = {}
 
 	internal var itemPosition = 0
 
-    val itemView: View
+    override val itemView: View
         get() = viewHolder.itemView
 
     val position: Int
@@ -103,22 +120,16 @@ class HolderBinder<Type: Any, Binding: ViewBinding>(
 		this.bindingBlock = bindingBlock
 	}
 
+	fun handlePayload(payloadHandlerBlock: Binding.(Type, List<BasePayload<Type>>) -> Unit) {
+		this.payloadHandlerBlock = payloadHandlerBlock
+	}
+
 	fun onDetachedFromWindow(b: Binding.() -> Unit) {
 		this.onDetachedFromWindow = b
 	}
 
 	fun onAttachedToWindow(b: Binding.() -> Unit) {
 		this.onAttachedToWindow = b
-	}
-
-	fun getString(@StringRes resId: Int): String = itemView.context.getString(resId)
-	fun getString(@StringRes resId: Int, vararg formatArgs: Any): String = itemView.context.getString(resId, *formatArgs)
-	fun getDrawable(@DrawableRes resId: Int): Drawable? = ContextCompat.getDrawable(itemView.context, resId)
-    fun getColor(@ColorRes resId: Int): Int = itemView.context.getColor(resId)
-	fun getColorStateList(@ColorRes resId: Int): ColorStateList? = ContextCompat.getColorStateList(itemView.context, resId)
-	fun <V: View> findViewById(@IdRes resId: Int): V = itemView.findViewById(resId)
-	fun setOnClickListener(l: (View) -> Unit) {
-		itemView.setOnClickListener { l.invoke(it) }
 	}
 
 }

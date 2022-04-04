@@ -6,6 +6,7 @@ import android.os.Looper
 import android.view.View
 import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.rerekt.rekukler.MultiBindingAdapter
 import com.rerekt.rekukler.dsl.configure
 import com.rerekt.rekukler.dsl.itemDecoration
@@ -23,7 +24,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
 
     private val articlesAdapter by lazy {
         MultiBindingAdapter(
-            articlesBinder { println("Click from Article item") },
+            articlesBinder(::onArticleClick),
             loadingBinder()
         )
     }
@@ -58,7 +59,7 @@ class ListFragment: Fragment(R.layout.fragment_main) {
         binding.rvArticles.apply {
             configure(articlesAdapter) {
                 linearLayout {
-                    orientation = LinearLayout.VERTICAL
+                    orientation = RecyclerView.VERTICAL
                 }
                 itemDecoration(
                     MarginDividerItemDecoration(
@@ -71,4 +72,19 @@ class ListFragment: Fragment(R.layout.fragment_main) {
             }
         }
     }
+
+    private fun onArticleClick(article: Article) {
+        articlesAdapter.items = articlesAdapter.items.map {
+            if (it is Article && it.id == article.id) {
+                it.copy(
+                    description = it.description + " + "
+                )
+            } else {
+                it
+            }
+        }
+
+        println("Click from Article item")
+    }
+
 }
