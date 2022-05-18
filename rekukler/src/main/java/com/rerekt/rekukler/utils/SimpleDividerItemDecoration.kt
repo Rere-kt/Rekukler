@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Rect
+import android.graphics.Color
 import android.graphics.Canvas
 import android.view.View
 import androidx.annotation.ColorInt
@@ -30,11 +31,6 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
             RecyclerView.VERTICAL -> drawVertical(canvas, parent)
             RecyclerView.HORIZONTAL -> drawHorizontal(canvas, parent)
             else -> IllegalArgumentException("Unsupported orientation: $orientation")
-        }
-        if (orientation == RecyclerView.VERTICAL) {
-            drawVertical(canvas, parent)
-        } else {
-            drawHorizontal(canvas, parent)
         }
     }
 
@@ -118,15 +114,16 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
 
     class Builder(private val context: Context) {
 
-        @ColorInt
         var orientation: Int = RecyclerView.VERTICAL
         var margin: Float = 0f
         var size: Int = 0
-        val dividerPaint = Paint().apply {
+        internal val dividerPaint = Paint().apply {
             style = Paint.Style.STROKE
+            color = Color.parseColor(COLOR_TRANSPARENT_HEX)
         }
-        val decorationPaint = Paint().apply {
+        internal val decorationPaint = Paint().apply {
             style = Paint.Style.FILL
+            color = Color.parseColor(COLOR_TRANSPARENT_HEX)
         }
 
         fun setOrientation(orientation: Int): Builder {
@@ -176,6 +173,10 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
         }
 
         fun build() = SimpleDividerItemDecoration(this)
+    }
+
+    private companion object {
+        const val COLOR_TRANSPARENT_HEX = "#00000000"
     }
 
 }
