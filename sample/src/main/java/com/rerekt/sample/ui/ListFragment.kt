@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.rerekt.rekukler.MultiBindingAdapter
@@ -12,7 +11,7 @@ import com.rerekt.rekukler.dsl.configure
 import com.rerekt.rekukler.dsl.itemDecoration
 import com.rerekt.rekukler.dsl.itemTouchHelper
 import com.rerekt.rekukler.dsl.linearLayout
-import com.rerekt.rekukler.utils.MarginDividerItemDecoration
+import com.rerekt.rekukler.utils.SimpleDividerItemDecoration
 import com.rerekt.sample.R
 import com.rerekt.sample.databinding.FragmentMainBinding
 import com.rerekt.sample.ui.global.dip
@@ -62,11 +61,12 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                     orientation = RecyclerView.VERTICAL
                 }
                 itemDecoration(
-                    MarginDividerItemDecoration(
-                        dividerLineWidth = 1.dip(resources),
-                        dividerLineMargin = 12.dip(resources),
-                        dividerLineColorRes = R.color.black
-                    )
+                    SimpleDividerItemDecoration.Builder(requireContext())
+                        .setOrientation(RecyclerView.VERTICAL)
+                        .setDividerWidth(3.dip(resources))
+                        .setMargin(16.dip(resources))
+                        .setSize(16.dip(resources).toInt())
+                        .build()
                 )
                 itemTouchHelper()
             }
