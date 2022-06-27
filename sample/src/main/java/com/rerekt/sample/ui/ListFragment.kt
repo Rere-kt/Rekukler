@@ -1,5 +1,6 @@
 package com.rerekt.sample.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -63,8 +64,12 @@ class ListFragment: Fragment(R.layout.fragment_main) {
                 itemDecoration(
                     SimpleDividerItemDecoration.Builder(requireContext())
                         .setOrientation(RecyclerView.VERTICAL)
-                        .setDividerWidth(3.dip(resources))
-                        .setMargin(16.dip(resources))
+                        .setDividerWidth(1.dip(resources))
+                        .setDividerColor(Color.BLACK)
+                        .setDividerMarginEnd(16.dip(resources))
+                        .setDividerMarginStart(3.dip(resources))
+                        .setDecorationBackgroundColor(Color.CYAN)
+                        .setShouldDecorateLastItem(true)
                         .setSize(16.dip(resources).toInt())
                         .build()
                 )

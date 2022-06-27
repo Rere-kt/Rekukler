@@ -17,31 +17,55 @@ import androidx.recyclerview.widget.RecyclerView.ItemDecoration
 class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
 
     private val orientation: Int = builder.orientation
-    private val margin: Float = builder.margin
+    private val marginStart: Float = builder.marginStart
+    private val marginEnd: Float = builder.marginEnd
     private val size: Int = builder.size
-    private val dividerPaint = builder.dividerPaint
-    private val decorationPaint = builder.decorationPaint
+    private val dividerPaint: Paint = builder.dividerPaint
+    private val decorationPaint: Paint = builder.decorationPaint
+    private val shouldDecorateLastItem: Boolean = builder.shouldDecorateLastItem
 
-    private val fullSize: Float = size + dividerPaint.strokeWidth
-    private val dividerRect = RectF()
+    private val decorationFullSize: Float = size + dividerPaint.strokeWidth
+    private val dividerRect: RectF = RectF()
 
-    override fun onDraw(canvas: Canvas, parent: RecyclerView, state: RecyclerView.State) {
+    override fun onDraw(
+        canvas: Canvas,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         if (parent.childCount == 0) return
+
+        val holders = if (shouldDecorateLastItem) {
+            parent.children
+        } else {
+            parent.children.take(parent.childCount - 1)
+        }
+
         when(orientation) {
-            RecyclerView.VERTICAL -> drawVertical(canvas, parent)
-            RecyclerView.HORIZONTAL -> drawHorizontal(canvas, parent)
-            else -> IllegalArgumentException("Unsupported orientation: $orientation")
+            RecyclerView.VERTICAL -> drawVertical(
+                canvas = canvas,
+                parent = parent,
+                viewHolders = holders
+            )
+            RecyclerView.HORIZONTAL -> drawHorizontal(
+                canvas = canvas,
+                parent = parent,
+                viewHolders = holders
+            )
+            else -> throw IllegalArgumentException("Unsupported orientation: $orientation")
         }
     }
 
-    private fun drawVertical(canvas: Canvas, parent: RecyclerView) {
+    private fun drawVertical(
+        canvas: Canvas,
+        parent: RecyclerView,
+        viewHolders: Sequence<View>
+    ) {
         val left = parent.paddingLeft.toFloat()
         val right = parent.width.toFloat() - parent.paddingRight
-        val holders = parent.children.take(parent.childCount - 1)
 
-        holders.forEach { holder ->
+        viewHolders.forEach { holder ->
             val top = holder.bottom.toFloat()
-            val bottom = top + fullSize
+            val bottom = top + decorationFullSize
             dividerRect.set(
                 left,
                 top,
@@ -55,25 +79,30 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
             )
 
             if (dividerPaint.strokeWidth != 0f) {
+                val dividerCenterY = dividerRect.centerY()
+
                 canvas.drawLine(
-                    dividerRect.left + margin,
-                    dividerRect.centerY(),
-                    dividerRect.right - margin,
-                    dividerRect.centerY(),
+                    dividerRect.left + marginStart,
+                    dividerCenterY,
+                    dividerRect.right - marginEnd,
+                    dividerCenterY,
                     dividerPaint
                 )
             }
         }
     }
 
-    private fun drawHorizontal(canvas: Canvas, parent: RecyclerView) {
+    private fun drawHorizontal(
+        canvas: Canvas,
+        parent: RecyclerView,
+        viewHolders: Sequence<View>
+    ) {
         val top = parent.paddingTop.toFloat()
         val bottom = parent.height.toFloat() - parent.paddingBottom
-        val holders = parent.children.take(parent.childCount - 1)
 
-        holders.forEach { holder ->
+        viewHolders.forEach { holder ->
             val right = holder.right.toFloat()
-            val left = right + fullSize
+            val left = right + decorationFullSize
             dividerRect.set(
                 left,
                 top,
@@ -87,11 +116,12 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
             )
 
             if (dividerPaint.strokeWidth != 0f) {
+                val dividerCenterX = dividerRect.centerX()
                 canvas.drawLine(
-                    dividerRect.centerX(),
-                    dividerRect.top + margin,
-                    dividerRect.centerX(),
-                    dividerRect.bottom - margin,
+                    dividerCenterX,
+                    dividerRect.top + marginStart,
+                    dividerCenterX,
+                    dividerRect.bottom - marginEnd,
                     dividerPaint
                 )
             }
@@ -104,19 +134,21 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
         parent: RecyclerView,
         state: RecyclerView.State
     ) {
-        if (parent.getChildAdapterPosition(view) != parent.adapter?.itemCount?.minus(1)) {
+        val itemPos = parent.getChildAdapterPosition(view)
+        val itemsCount = parent.adapter?.itemCount?.minus(1)
+        if (itemPos != itemsCount || (itemPos == itemsCount && shouldDecorateLastItem)) {
             if (orientation == RecyclerView.VERTICAL)
-                outRect.bottom = fullSize.toInt()
+                outRect.bottom = decorationFullSize.toInt()
             else
-                outRect.right = fullSize.toInt()
+                outRect.right = decorationFullSize.toInt()
         }
     }
 
     class Builder(private val context: Context) {
-
-        var orientation: Int = RecyclerView.VERTICAL
-        var margin: Float = 0f
-        var size: Int = 0
+        internal var orientation: Int = RecyclerView.VERTICAL
+        internal var marginStart: Float = 0f
+        internal var marginEnd: Float = 0f
+        internal var size: Int = 0
         internal val dividerPaint = Paint().apply {
             style = Paint.Style.STROKE
             color = Color.parseColor(COLOR_TRANSPARENT_HEX)
@@ -125,13 +157,14 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
             style = Paint.Style.FILL
             color = Color.parseColor(COLOR_TRANSPARENT_HEX)
         }
+        internal var shouldDecorateLastItem: Boolean = false
 
         fun setOrientation(orientation: Int): Builder {
             this.orientation = orientation
             return this
         }
 
-        fun setColor(@ColorRes colorRes: Int): Builder {
+        fun setDividerColorRes(@ColorRes colorRes: Int): Builder {
             dividerPaint.color = ContextCompat.getColor(
                 context,
                 colorRes
@@ -139,8 +172,29 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
             return this
         }
 
+        fun setDividerColor(@ColorInt color: Int): Builder {
+            dividerPaint.color = color
+            return this
+        }
+
         fun setMargin(margin: Float): Builder {
-            this.margin = margin
+            this.marginEnd = margin
+            this.marginStart = margin
+            return this
+        }
+
+        fun setDividerMarginStart(margin: Float): Builder {
+            this.marginEnd = margin
+            return this
+        }
+
+        fun setDividerMarginEnd(margin: Float): Builder {
+            this.marginStart = margin
+            return this
+        }
+
+        fun setShouldDecorateLastItem(isDecorate: Boolean): Builder {
+            shouldDecorateLastItem = isDecorate
             return this
         }
 
