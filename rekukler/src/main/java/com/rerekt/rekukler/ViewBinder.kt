@@ -14,7 +14,7 @@ class ViewBinder<Type: Any, Binding: ViewBinding> (
         val areContentsSame: (Type, Type) -> Boolean,
 		val getChangePayload: (Type, Type) -> List<BasePayload<Type>>,
         private val holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit,
-		private val layoutInflater: (parent: ViewGroup) -> LayoutInflater = { parent -> LayoutInflater.from(parent.context) }
+		private val layoutInflater: (parent: ViewGroup) -> LayoutInflater
 ) {
 
     fun createViewHolder(parent: ViewGroup): RekuklerViewHolder<Type, Binding> {
