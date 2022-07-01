@@ -15,8 +15,7 @@ data class Article(
 fun articlesBinder(
     onClick: (Article) -> Unit = {}
 ) = viewBinder<Article, ListItemBinding>(
-    layoutResId = R.layout.list_item,
-    binder = ListItemBinding::bind,
+    binder = { layoutInflater, parent -> ListItemBinding.inflate(layoutInflater, parent, false) },
 	isForItem = { it is Article },
     areItemsSame = { old, new -> old.id == new.id },
     areContentsSame = { old, new -> old == new },

@@ -7,6 +7,5 @@ import com.rerekt.sample.databinding.ItemLoadingBinding
 object Loading
 
 fun loadingBinder() = viewBinder<Loading, ItemLoadingBinding>(
-    R.layout.item_loading,
-    binder = { ItemLoadingBinding.bind(it) }
+    binder = { layoutInflater, parent -> ItemLoadingBinding.inflate(layoutInflater, parent, false) }
 )
