@@ -184,12 +184,12 @@ class SimpleDividerItemDecoration(builder: Builder): ItemDecoration() {
         }
 
         fun setDividerMarginStart(margin: Float): Builder {
-            this.marginEnd = margin
+            this.marginStart = margin
             return this
         }
 
         fun setDividerMarginEnd(margin: Float): Builder {
-            this.marginStart = margin
+            this.marginEnd = margin
             return this
         }
 
