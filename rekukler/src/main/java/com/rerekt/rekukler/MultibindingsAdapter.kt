@@ -35,7 +35,7 @@ open class MultiBindingAdapter(
 	): RecyclerView.ViewHolder =
 		checkNotNull(
 			value = bindersSet.getOrNull(viewType)?.createViewHolder(parent),
-			lazyMessage = { "Unnable to find ViewBinder for viewType $viewType" }
+			lazyMessage = { "Unable to find ViewBinder for viewType $viewType" }
 		)
 
 	override fun onBindViewHolder(viewHolder: RecyclerView.ViewHolder, position: Int) {
@@ -52,19 +52,23 @@ open class MultiBindingAdapter(
 		position: Int,
 		payloads: MutableList<Any>
 	) {
-		getBinder(position).bindViewHolder(
-			viewHolder = viewHolder as RekuklerViewHolder<*, *>,
-			position = position,
-			item = items[position],
-			payloads = payloads
-		)
+		if (payloads.isEmpty()) {
+			super.onBindViewHolder(viewHolder, position, payloads)
+		} else {
+			getBinder(position).bindViewHolder(
+				viewHolder = viewHolder as RekuklerViewHolder<*, *>,
+				position = position,
+				item = items[position],
+				payloads = payloads
+			)
+		}
 	}
 
 	private fun getBinder(position: Int): ViewBinder<*, *> {
 		val item = items[position]
 		return checkNotNull(
 			value = bindersSet.find { it.isForItem(item) },
-			lazyMessage = { "Unnable to find ViewBinder for ${item::class}" }
+			lazyMessage = { "Unable to find ViewBinder for ${item::class}" }
 		)
 	}
 

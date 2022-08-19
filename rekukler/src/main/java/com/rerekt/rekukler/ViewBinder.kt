@@ -3,7 +3,6 @@ package com.rerekt.rekukler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.LayoutRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 
@@ -75,13 +74,13 @@ open class RekuklerViewHolder<Type: Any, Binding: ViewBinding>(
 }
 
 inline fun <reified Type: Any, Binding: ViewBinding> viewBinder(
-        noinline isForItem: (item: Any) -> Boolean = { it is Type },
-        noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
-        noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
-        noinline getChangePayload: (Type, Type) -> List<BasePayload<Type>> = { old, new -> listOf() },
-		noinline binder: (layoutInflater: LayoutInflater, parent: ViewGroup) -> Binding,
-		noinline layoutInflater: (parent: ViewGroup) -> LayoutInflater = { parent -> LayoutInflater.from(parent.context) },
-		noinline holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit = {},
+    noinline isForItem: (item: Any) -> Boolean = { it is Type },
+    noinline areItemsSame: (Type, Type) -> Boolean = { old, new -> old == new },
+    noinline areContentsSame: (Type, Type) -> Boolean = { old, new -> old == new },
+    noinline getChangePayload: (Type, Type) -> List<BasePayload<Type>> = { old, new -> listOf() },
+	noinline binder: (layoutInflater: LayoutInflater, parent: ViewGroup) -> Binding,
+	noinline layoutInflater: (parent: ViewGroup) -> LayoutInflater = { parent -> LayoutInflater.from(parent.context) },
+	noinline holderBinder: HolderBinder<Type, Binding>.(Type) -> Unit = {},
 ) = ViewBinder(
 	binder = binder,
 	isForItem = isForItem,
